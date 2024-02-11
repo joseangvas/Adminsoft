@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         localhost
--- Versión del servidor:         8.0.33 - MySQL Community Server - GPL
+-- Versión del servidor:         11.2.2-MariaDB - mariadb.org binary distribution
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             12.6.0.6765
 -- --------------------------------------------------------
@@ -16,50 +16,50 @@
 
 
 -- Volcando estructura de base de datos para adminsoft
-CREATE DATABASE IF NOT EXISTS `adminsoft` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE IF NOT EXISTS `adminsoft` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 USE `adminsoft`;
 
 -- Volcando estructura para tabla adminsoft.bank_accounts
 CREATE TABLE IF NOT EXISTS `bank_accounts` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `account_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `account_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `initial_balance` decimal(25,4) NOT NULL,
-  `account_no` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `account_no` varchar(255) NOT NULL,
   `contact_person` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `phone_number` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `phone_number` varchar(14) DEFAULT NULL,
   `opening_date` datetime DEFAULT NULL,
-  `url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `total_deposit` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `total_withdraw` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `total_transfer_from_other` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `total_transfer_to_other` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `url` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `total_deposit` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `total_withdraw` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `total_transfer_from_other` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `total_transfer_to_other` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.bank_accounts: ~0 rows (aproximadamente)
-INSERT INTO `bank_accounts` (`id`, `account_name`, `account_details`, `initial_balance`, `account_no`, `contact_person`, `phone_number`, `opening_date`, `url`, `total_deposit`, `total_withdraw`, `total_transfer_from_other`, `total_transfer_to_other`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `bank_accounts` (`id`, `account_name`, `account_details`, `initial_balance`, `account_no`, `contact_person`, `phone_number`, `opening_date`, `url`, `total_deposit`, `total_withdraw`, `total_transfer_from_other`, `total_transfer_to_other`, `created_at`, `updated_at`) VALUES
 	(1, 'Default Account', 'This is a default account for any store', 0.0000, '1234567890', 'iAngryboy', '+880133333333', '2019-05-15 08:27:03', 'http://itsolution24.com', 466063.6360, 0.0000, 0.0000, 0.0000, '2019-01-16 13:23:03', '2019-07-02 11:56:57');
 
 -- Volcando estructura para tabla adminsoft.bank_account_to_store
 CREATE TABLE IF NOT EXISTS `bank_account_to_store` (
-  `ba2s` int unsigned NOT NULL AUTO_INCREMENT,
-  `store_id` int unsigned NOT NULL,
-  `account_id` int unsigned NOT NULL,
-  `deposit` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `withdraw` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `transfer_from_other` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `transfer_to_other` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `ba2s` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL,
+  `account_id` int(10) unsigned NOT NULL,
+  `deposit` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `withdraw` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `transfer_from_other` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `transfer_to_other` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ba2s`),
   KEY `account_id` (`account_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.bank_account_to_store: ~5 rows (aproximadamente)
-INSERT INTO `bank_account_to_store` (`ba2s`, `store_id`, `account_id`, `deposit`, `withdraw`, `transfer_from_other`, `transfer_to_other`, `status`, `sort_order`) VALUES
+REPLACE INTO `bank_account_to_store` (`ba2s`, `store_id`, `account_id`, `deposit`, `withdraw`, `transfer_from_other`, `transfer_to_other`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 52136.9500, 266181.6860, 0.0000, 0.0000, 1, 0),
 	(2, 2, 1, 0.0000, 147745.0000, 0.0000, 0.0000, 1, 0),
 	(3, 3, 1, 0.0000, 0.0000, 0.0000, 0.0000, 1, 0),
@@ -68,22 +68,22 @@ INSERT INTO `bank_account_to_store` (`ba2s`, `store_id`, `account_id`, `deposit`
 
 -- Volcando estructura para tabla adminsoft.bank_transaction_info
 CREATE TABLE IF NOT EXISTS `bank_transaction_info` (
-  `info_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `transaction_type` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `is_substract` tinyint(1) NOT NULL DEFAULT '0',
-  `is_hide` tinyint(1) NOT NULL DEFAULT '0',
-  `account_id` int unsigned NOT NULL,
-  `source_id` int DEFAULT NULL,
-  `exp_category_id` int DEFAULT NULL,
-  `ref_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL COMMENT 'e.g. Transaction ID, Check No.',
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `title` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `from_account_id` int unsigned DEFAULT NULL,
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
-  `image` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `created_by` int unsigned NOT NULL DEFAULT '0',
+  `info_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `transaction_type` text DEFAULT NULL,
+  `is_substract` tinyint(1) NOT NULL DEFAULT 0,
+  `is_hide` tinyint(1) NOT NULL DEFAULT 0,
+  `account_id` int(10) unsigned NOT NULL,
+  `source_id` int(11) DEFAULT NULL,
+  `exp_category_id` int(11) DEFAULT NULL,
+  `ref_no` varchar(100) NOT NULL COMMENT 'e.g. Transaction ID, Check No.',
+  `invoice_id` varchar(100) DEFAULT NULL,
+  `title` varchar(250) NOT NULL,
+  `details` text DEFAULT NULL,
+  `from_account_id` int(10) unsigned DEFAULT NULL,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `image` text DEFAULT NULL,
+  `created_by` int(10) unsigned NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`info_id`),
@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS `bank_transaction_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.bank_transaction_info: ~46 rows (aproximadamente)
-INSERT INTO `bank_transaction_info` (`info_id`, `store_id`, `transaction_type`, `is_substract`, `is_hide`, `account_id`, `source_id`, `exp_category_id`, `ref_no`, `invoice_id`, `title`, `details`, `from_account_id`, `status`, `image`, `created_by`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `bank_transaction_info` (`info_id`, `store_id`, `transaction_type`, `is_substract`, `is_hide`, `account_id`, `source_id`, `exp_category_id`, `ref_no`, `invoice_id`, `title`, `details`, `from_account_id`, `status`, `image`, `created_by`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'withdraw', 0, 0, 1, NULL, 9, 'W1', 'B2432', 'Debit for Product Purchase', 'Supplier name: No Supplier', NULL, 1, 'NULL', 1, '2019-12-15 12:18:36', NULL),
 	(2, 1, 'deposit', 0, 0, 1, 1, NULL, 'D2', '100000001', 'Deposit for selling', 'Customer name: Walking Customer', NULL, 1, 'NULL', 1, '2019-12-15 12:19:46', NULL),
 	(3, 1, 'deposit', 0, 0, 1, 1, NULL, 'D3', '100000002', 'Deposit for selling', 'Customer name: Walking Customer', NULL, 1, 'NULL', 1, '2021-01-20 19:49:33', NULL),
@@ -142,17 +142,17 @@ INSERT INTO `bank_transaction_info` (`info_id`, `store_id`, `transaction_type`, 
 
 -- Volcando estructura para tabla adminsoft.bank_transaction_price
 CREATE TABLE IF NOT EXISTS `bank_transaction_price` (
-  `price_id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `info_id` int DEFAULT NULL,
-  `ref_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL COMMENT 'e.g. Transaction ID, Check No.',
+  `price_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `info_id` int(11) DEFAULT NULL,
+  `ref_no` varchar(100) NOT NULL COMMENT 'e.g. Transaction ID, Check No.',
   `amount` decimal(25,4) DEFAULT NULL,
   PRIMARY KEY (`price_id`),
   KEY `ref_no` (`ref_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.bank_transaction_price: ~46 rows (aproximadamente)
-INSERT INTO `bank_transaction_price` (`price_id`, `store_id`, `info_id`, `ref_no`, `amount`) VALUES
+REPLACE INTO `bank_transaction_price` (`price_id`, `store_id`, `info_id`, `ref_no`, `amount`) VALUES
 	(1, 1, 1, 'W1', 250000.0000),
 	(2, 1, 2, 'D2', 3000.0000),
 	(3, 1, 3, 'D3', 9000.0000),
@@ -202,29 +202,29 @@ INSERT INTO `bank_transaction_price` (`price_id`, `store_id`, `info_id`, `ref_no
 
 -- Volcando estructura para tabla adminsoft.boxes
 CREATE TABLE IF NOT EXISTS `boxes` (
-  `box_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `box_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code_name` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `box_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `box_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `box_name` varchar(100) NOT NULL,
+  `code_name` varchar(55) DEFAULT NULL,
+  `box_details` text DEFAULT NULL,
   PRIMARY KEY (`box_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.boxes: ~0 rows (aproximadamente)
-INSERT INTO `boxes` (`box_id`, `box_name`, `code_name`, `box_details`) VALUES
+REPLACE INTO `boxes` (`box_id`, `box_name`, `code_name`, `box_details`) VALUES
 	(1, 'Common Box', 'common', 'Common Box details here...');
 
 -- Volcando estructura para tabla adminsoft.box_to_store
 CREATE TABLE IF NOT EXISTS `box_to_store` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `box_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `box_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.box_to_store: ~5 rows (aproximadamente)
-INSERT INTO `box_to_store` (`id`, `box_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `box_to_store` (`id`, `box_id`, `store_id`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 0),
 	(2, 1, 2, 1, 0),
 	(3, 1, 3, 1, 0),
@@ -233,18 +233,18 @@ INSERT INTO `box_to_store` (`id`, `box_id`, `store_id`, `status`, `sort_order`) 
 
 -- Volcando estructura para tabla adminsoft.brands
 CREATE TABLE IF NOT EXISTS `brands` (
-  `brand_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `brand_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `brand_details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `brand_image` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `brand_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `brand_name` varchar(100) NOT NULL,
+  `code_name` varchar(100) NOT NULL,
+  `brand_details` longtext DEFAULT NULL,
+  `brand_image` varchar(250) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`brand_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.brands: ~5 rows (aproximadamente)
-INSERT INTO `brands` (`brand_id`, `brand_name`, `code_name`, `brand_details`, `brand_image`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `brands` (`brand_id`, `brand_name`, `code_name`, `brand_details`, `brand_image`, `created_at`, `updated_at`) VALUES
 	(1, 'No brand', 'no_brand', '', NULL, '2019-03-31 03:36:47', '2019-07-02 11:59:26'),
 	(2, 'INKA KOLA', 'inka_kola', '', '', '2021-01-22 16:15:41', NULL),
 	(3, 'COCA COLA', 'coca_cola', '', '', '2021-01-22 16:15:51', NULL),
@@ -253,17 +253,17 @@ INSERT INTO `brands` (`brand_id`, `brand_name`, `code_name`, `brand_details`, `b
 
 -- Volcando estructura para tabla adminsoft.brand_to_store
 CREATE TABLE IF NOT EXISTS `brand_to_store` (
-  `b2s_id` int NOT NULL AUTO_INCREMENT,
-  `brand_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `b2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `brand_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`b2s_id`),
   KEY `brand_id` (`brand_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.brand_to_store: ~15 rows (aproximadamente)
-INSERT INTO `brand_to_store` (`b2s_id`, `brand_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `brand_to_store` (`b2s_id`, `brand_id`, `store_id`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 0),
 	(2, 0, 1, 1, 0),
 	(3, 0, 2, 1, 0),
@@ -282,11 +282,11 @@ INSERT INTO `brand_to_store` (`b2s_id`, `brand_id`, `store_id`, `status`, `sort_
 
 -- Volcando estructura para tabla adminsoft.categorys
 CREATE TABLE IF NOT EXISTS `categorys` (
-  `category_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category_name` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `category_slug` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `parent_id` int DEFAULT NULL,
-  `category_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `parent_id` int(11) DEFAULT NULL,
+  `category_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `category_image` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -294,7 +294,7 @@ CREATE TABLE IF NOT EXISTS `categorys` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.categorys: ~7 rows (aproximadamente)
-INSERT INTO `categorys` (`category_id`, `category_name`, `category_slug`, `parent_id`, `category_details`, `category_image`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `categorys` (`category_id`, `category_name`, `category_slug`, `parent_id`, `category_details`, `category_image`, `created_at`, `updated_at`) VALUES
 	(1, 'uncategory', 'uncategory', 0, 'this is a category details, simple text will be display here', NULL, '2018-08-17 05:28:16', '2019-07-02 12:00:23'),
 	(2, 'CARNES', 'carnes', 0, 'TODO TIPO DE RES', '', '2021-01-21 14:59:08', NULL),
 	(3, 'ABARROTES', 'abarrotes', 0, '', '', '2021-01-21 14:59:28', NULL),
@@ -305,17 +305,17 @@ INSERT INTO `categorys` (`category_id`, `category_name`, `category_slug`, `paren
 
 -- Volcando estructura para tabla adminsoft.category_to_store
 CREATE TABLE IF NOT EXISTS `category_to_store` (
-  `c2s_id` int NOT NULL AUTO_INCREMENT,
-  `ccategory_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `c2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ccategory_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`c2s_id`),
   KEY `ccategory_id` (`ccategory_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.category_to_store: ~27 rows (aproximadamente)
-INSERT INTO `category_to_store` (`c2s_id`, `ccategory_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `category_to_store` (`c2s_id`, `ccategory_id`, `store_id`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 0),
 	(2, 1, 2, 1, 0),
 	(3, 2, 1, 1, 0),
@@ -346,19 +346,19 @@ INSERT INTO `category_to_store` (`c2s_id`, `ccategory_id`, `store_id`, `status`,
 
 -- Volcando estructura para tabla adminsoft.currency
 CREATE TABLE IF NOT EXISTS `currency` (
-  `currency_id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code` varchar(3) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `symbol_left` varchar(12) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `symbol_right` varchar(12) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `decimal_place` char(1) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `value` decimal(25,4) NOT NULL DEFAULT '1.0000',
+  `currency_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(32) NOT NULL,
+  `code` varchar(3) NOT NULL,
+  `symbol_left` varchar(12) NOT NULL,
+  `symbol_right` varchar(12) NOT NULL,
+  `decimal_place` char(1) NOT NULL,
+  `value` decimal(25,4) NOT NULL DEFAULT 1.0000,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`currency_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.currency: ~17 rows (aproximadamente)
-INSERT INTO `currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbol_right`, `decimal_place`, `value`, `created_at`) VALUES
+REPLACE INTO `currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbol_right`, `decimal_place`, `value`, `created_at`) VALUES
 	(1, 'United States Dollar', 'USD', '$', '', '2', 1.0000, '2018-09-19 14:40:00'),
 	(2, 'Pound Sterling', 'GBP', 'Â£', '', '2', 0.6125, '2018-09-19 14:40:00'),
 	(3, 'Euro', 'EUR', '', 'â‚¬', '2', 0.7846, '2018-09-19 14:40:00'),
@@ -379,17 +379,17 @@ INSERT INTO `currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbol_r
 
 -- Volcando estructura para tabla adminsoft.currency_to_store
 CREATE TABLE IF NOT EXISTS `currency_to_store` (
-  `ca2s_id` int NOT NULL AUTO_INCREMENT,
-  `currency_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `ca2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `currency_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ca2s_id`),
   KEY `currency_id` (`currency_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.currency_to_store: ~21 rows (aproximadamente)
-INSERT INTO `currency_to_store` (`ca2s_id`, `currency_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `currency_to_store` (`ca2s_id`, `currency_id`, `store_id`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 0),
 	(3, 3, 1, 1, 0),
 	(4, 4, 1, 1, 0),
@@ -414,28 +414,28 @@ INSERT INTO `currency_to_store` (`ca2s_id`, `currency_id`, `store_id`, `status`,
 
 -- Volcando estructura para tabla adminsoft.customers
 CREATE TABLE IF NOT EXISTS `customers` (
-  `customer_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `customer_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `customer_email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `customer_mobile` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `customer_address` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `customer_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_name` varchar(100) NOT NULL,
+  `customer_email` varchar(100) DEFAULT NULL,
+  `customer_mobile` varchar(14) DEFAULT NULL,
+  `customer_address` text DEFAULT NULL,
   `dob` date DEFAULT NULL,
-  `customer_sex` tinyint(1) NOT NULL DEFAULT '1',
-  `customer_age` int unsigned DEFAULT NULL,
-  `gtin` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `customer_city` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `customer_state` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `customer_country` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `is_giftcard` tinyint(1) NOT NULL DEFAULT '0',
-  `password` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `raw_password` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `customer_sex` tinyint(1) NOT NULL DEFAULT 1,
+  `customer_age` int(10) unsigned DEFAULT NULL,
+  `gtin` varchar(100) DEFAULT NULL,
+  `customer_city` varchar(100) DEFAULT NULL,
+  `customer_state` varchar(100) DEFAULT NULL,
+  `customer_country` varchar(100) DEFAULT NULL,
+  `is_giftcard` tinyint(1) NOT NULL DEFAULT 0,
+  `password` varchar(100) DEFAULT NULL,
+  `raw_password` varchar(100) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.customers: ~6 rows (aproximadamente)
-INSERT INTO `customers` (`customer_id`, `customer_name`, `customer_email`, `customer_mobile`, `customer_address`, `dob`, `customer_sex`, `customer_age`, `gtin`, `customer_city`, `customer_state`, `customer_country`, `is_giftcard`, `password`, `raw_password`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `customers` (`customer_id`, `customer_name`, `customer_email`, `customer_mobile`, `customer_address`, `dob`, `customer_sex`, `customer_age`, `gtin`, `customer_city`, `customer_state`, `customer_country`, `is_giftcard`, `password`, `raw_password`, `created_at`, `updated_at`) VALUES
 	(1, 'JUAN DE LA VEGA', 'juan@grupoalegres.com', '93245684', 'AV. JUAN DE LA VEGA', '1993-01-01', 1, 20, '', 'AN', 'AN', 'PE', 0, 'c33367701511b4f6020ec61ded352059', '654321', '2018-04-29 14:18:37', '2019-07-02 13:50:11'),
 	(2, 'JOSE TORRES', '295e6d@gmail.com', '932145632', 'AV. JUAN DE LA VEGA', '1969-12-31', 1, 20, '', 'LIMA', 'PERUANO', 'PE', 0, NULL, NULL, '2021-01-24 22:14:30', NULL),
 	(3, 'ROBER CARLOS', '9aff1c@gmail.com', '931240141', 'Av. Micaela Bastidas', '1999-06-09', 1, 21, '', 'Lima', 'peruano', 'PE', 1, NULL, NULL, '2021-02-18 09:14:39', NULL),
@@ -445,18 +445,18 @@ INSERT INTO `customers` (`customer_id`, `customer_name`, `customer_email`, `cust
 
 -- Volcando estructura para tabla adminsoft.customer_to_store
 CREATE TABLE IF NOT EXISTS `customer_to_store` (
-  `c2s_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `customer_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `balance` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `due` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `c2s_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `balance` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `due` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`c2s_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.customer_to_store: ~30 rows (aproximadamente)
-INSERT INTO `customer_to_store` (`c2s_id`, `customer_id`, `store_id`, `balance`, `due`, `status`, `sort_order`) VALUES
+REPLACE INTO `customer_to_store` (`c2s_id`, `customer_id`, `store_id`, `balance`, `due`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 697.0000, 0.0000, 1, 1),
 	(2, 1, 2, 0.0000, 0.0000, 1, 0),
 	(3, 2, 1, 5000.0000, 0.0000, 1, 0),
@@ -490,17 +490,17 @@ INSERT INTO `customer_to_store` (`c2s_id`, `customer_id`, `store_id`, `balance`,
 
 -- Volcando estructura para tabla adminsoft.customer_transactions
 CREATE TABLE IF NOT EXISTS `customer_transactions` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `type` enum('purchase','add_balance','substract_balance','due_paid','others') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `reference_no` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ref_invoice_id` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `customer_id` int unsigned NOT NULL,
-  `store_id` int unsigned NOT NULL,
-  `pmethod_id` int unsigned NOT NULL DEFAULT '0',
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `balance` decimal(25,4) DEFAULT '0.0000',
-  `created_by` int unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` enum('purchase','add_balance','substract_balance','due_paid','others') NOT NULL,
+  `reference_no` varchar(55) DEFAULT NULL,
+  `ref_invoice_id` varchar(55) DEFAULT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `store_id` int(10) unsigned NOT NULL,
+  `pmethod_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `balance` decimal(25,4) DEFAULT 0.0000,
+  `created_by` int(10) unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -508,7 +508,7 @@ CREATE TABLE IF NOT EXISTS `customer_transactions` (
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.customer_transactions: ~11 rows (aproximadamente)
-INSERT INTO `customer_transactions` (`id`, `type`, `reference_no`, `ref_invoice_id`, `customer_id`, `store_id`, `pmethod_id`, `notes`, `amount`, `balance`, `created_by`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `customer_transactions` (`id`, `type`, `reference_no`, `ref_invoice_id`, `customer_id`, `store_id`, `pmethod_id`, `notes`, `amount`, `balance`, `created_by`, `created_at`, `updated_at`) VALUES
 	(1, 'add_balance', 'CT210218100001', NULL, 3, 1, 1, '', 500.0000, 500.0000, 1, '2021-02-18 09:14:40', NULL),
 	(2, 'add_balance', 'CT2102181002', NULL, 2, 1, 5, 'COMPRAS FAMILIARES', 5000.0000, 5000.0000, 1, '2021-02-18 09:19:38', NULL),
 	(3, 'add_balance', 'CT21021811003', NULL, 1, 1, 5, 'COPRAS', 1000.0000, 1000.0000, 1, '2021-02-18 09:20:44', NULL),
@@ -523,17 +523,17 @@ INSERT INTO `customer_transactions` (`id`, `type`, `reference_no`, `ref_invoice_
 
 -- Volcando estructura para tabla adminsoft.expenses
 CREATE TABLE IF NOT EXISTS `expenses` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `store_id` int unsigned NOT NULL,
-  `reference_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `category_id` int unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL,
+  `reference_no` varchar(100) DEFAULT NULL,
+  `category_id` int(10) unsigned NOT NULL,
   `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `amount` decimal(25,4) NOT NULL,
-  `returnable` enum('no','yes') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'no',
+  `returnable` enum('no','yes') NOT NULL DEFAULT 'no',
   `note` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `attachment` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `created_by` int DEFAULT NULL,
+  `attachment` varchar(100) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_by` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -543,30 +543,30 @@ CREATE TABLE IF NOT EXISTS `expenses` (
 
 -- Volcando estructura para tabla adminsoft.expense_categorys
 CREATE TABLE IF NOT EXISTS `expense_categorys` (
-  `category_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `category_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category_name` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `category_slug` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `parent_id` int unsigned NOT NULL DEFAULT '0',
-  `category_details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `sell_return` tinyint(1) NOT NULL DEFAULT '0',
-  `sell_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `loan_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `loan_payment` tinyint(1) NOT NULL DEFAULT '0',
-  `giftcard_sell_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `topup_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `product_purchase` tinyint(1) NOT NULL DEFAULT '0',
-  `stock_transfer` tinyint(1) NOT NULL DEFAULT '0',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `category_details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `sell_return` tinyint(1) NOT NULL DEFAULT 0,
+  `sell_delete` tinyint(1) NOT NULL DEFAULT 0,
+  `loan_delete` tinyint(1) NOT NULL DEFAULT 0,
+  `loan_payment` tinyint(1) NOT NULL DEFAULT 0,
+  `giftcard_sell_delete` tinyint(1) NOT NULL DEFAULT 0,
+  `topup_delete` tinyint(1) NOT NULL DEFAULT 0,
+  `product_purchase` tinyint(1) NOT NULL DEFAULT 0,
+  `stock_transfer` tinyint(1) NOT NULL DEFAULT 0,
   `due_paid` tinyint(1) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `is_hide` tinyint(1) NOT NULL DEFAULT '0',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `is_hide` tinyint(1) NOT NULL DEFAULT 0,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.expense_categorys: ~15 rows (aproximadamente)
-INSERT INTO `expense_categorys` (`category_id`, `category_name`, `category_slug`, `parent_id`, `category_details`, `sell_return`, `sell_delete`, `loan_delete`, `loan_payment`, `giftcard_sell_delete`, `topup_delete`, `product_purchase`, `stock_transfer`, `due_paid`, `status`, `is_hide`, `sort_order`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `expense_categorys` (`category_id`, `category_name`, `category_slug`, `parent_id`, `category_details`, `sell_return`, `sell_delete`, `loan_delete`, `loan_payment`, `giftcard_sell_delete`, `topup_delete`, `product_purchase`, `stock_transfer`, `due_paid`, `status`, `is_hide`, `sort_order`, `created_at`, `updated_at`) VALUES
 	(1, 'Employee Salary', 'employee_salary', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '2019-02-16 17:21:53', '2019-07-02 12:08:08'),
 	(2, 'Showroom Rent', 'showroom_rent', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '2019-02-16 17:22:13', '2019-07-02 12:08:10'),
 	(3, 'Electricity Bill + Dish', 'electricity_bill_+_dish', 0, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, '2019-02-16 17:22:29', '2019-07-02 12:08:12'),
@@ -585,85 +585,85 @@ INSERT INTO `expense_categorys` (`category_id`, `category_name`, `category_slug`
 
 -- Volcando estructura para tabla adminsoft.gift_cards
 CREATE TABLE IF NOT EXISTS `gift_cards` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT NULL,
-  `card_no` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `card_no` varchar(20) NOT NULL,
   `value` decimal(25,4) NOT NULL,
-  `customer_id` int DEFAULT NULL,
-  `customer` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer` varchar(255) DEFAULT NULL,
   `balance` decimal(25,4) NOT NULL,
   `expiry` date DEFAULT NULL,
-  `created_by` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `created_by` varchar(55) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `card_no` (`card_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.gift_cards: ~3 rows (aproximadamente)
-INSERT INTO `gift_cards` (`id`, `date`, `card_no`, `value`, `customer_id`, `customer`, `balance`, `expiry`, `created_by`) VALUES
+REPLACE INTO `gift_cards` (`id`, `date`, `card_no`, `value`, `customer_id`, `customer`, `balance`, `expiry`, `created_by`) VALUES
 	(1, NULL, '4877491338288210', 0.0000, 3, NULL, 2000.0000, '2022-02-24', '1'),
 	(2, NULL, '4803745341067230', 500.0000, 5, NULL, 4900.0000, '2022-02-25', '1'),
 	(3, NULL, '7140723188493114', 5000.0000, 4, NULL, 4649.0100, '2022-03-05', '1');
 
 -- Volcando estructura para tabla adminsoft.gift_card_topups
 CREATE TABLE IF NOT EXISTS `gift_card_topups` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime DEFAULT NULL,
-  `card_id` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `card_id` varchar(20) NOT NULL,
   `amount` decimal(15,4) NOT NULL,
-  `created_by` int NOT NULL,
+  `created_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `card_id` (`card_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.gift_card_topups: ~3 rows (aproximadamente)
-INSERT INTO `gift_card_topups` (`id`, `date`, `card_id`, `amount`, `created_by`) VALUES
+REPLACE INTO `gift_card_topups` (`id`, `date`, `card_id`, `amount`, `created_by`) VALUES
 	(1, '2021-02-18 09:27:25', '4877491338288210', 2000.0000, 1),
 	(2, '2021-02-18 13:41:57', '4803745341067230', 5000.0000, 1),
 	(3, '2021-02-18 19:06:40', '7140723188493114', 5000.0000, 1);
 
 -- Volcando estructura para tabla adminsoft.holding_info
 CREATE TABLE IF NOT EXISTS `holding_info` (
-  `info_id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `order_title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `ref_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `customer_id` int unsigned NOT NULL DEFAULT '0',
-  `customer_mobile` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `invoice_note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `total_items` smallint DEFAULT NULL,
-  `created_by` int NOT NULL DEFAULT '0',
+  `info_id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `order_title` varchar(255) NOT NULL,
+  `ref_no` varchar(100) NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `customer_mobile` varchar(20) DEFAULT NULL,
+  `invoice_note` text DEFAULT NULL,
+  `total_items` smallint(6) DEFAULT NULL,
+  `created_by` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`info_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.holding_info: ~2 rows (aproximadamente)
-INSERT INTO `holding_info` (`info_id`, `store_id`, `order_title`, `ref_no`, `customer_id`, `customer_mobile`, `invoice_note`, `total_items`, `created_by`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `holding_info` (`info_id`, `store_id`, `order_title`, `ref_no`, `customer_id`, `customer_mobile`, `invoice_note`, `total_items`, `created_by`, `created_at`, `updated_at`) VALUES
 	(3, 1, 'CASA DE JUAN', 'ab4250', 4, '9312548', '', 1, 1, '2021-02-18 09:25:24', NULL),
 	(4, 1, 'dddddddddd DE JUAN', 'b504e5', 1, '93245684', '', 1, 1, '2021-02-18 19:21:51', NULL);
 
 -- Volcando estructura para tabla adminsoft.holding_item
 CREATE TABLE IF NOT EXISTS `holding_item` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `ref_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `item_id` int unsigned NOT NULL,
-  `category_id` int unsigned NOT NULL DEFAULT '0',
-  `brand_id` int DEFAULT NULL,
-  `sup_id` int NOT NULL DEFAULT '0',
-  `item_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `item_price` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `item_discount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `tax_method` enum('inclusive','exclusive') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'exclusive',
-  `taxrate_id` int unsigned NOT NULL,
-  `tax` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gst` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ref_no` varchar(100) NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `item_id` int(10) unsigned NOT NULL,
+  `category_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `brand_id` int(11) DEFAULT NULL,
+  `sup_id` int(11) NOT NULL DEFAULT 0,
+  `item_name` varchar(100) NOT NULL,
+  `item_price` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `item_discount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `tax_method` enum('inclusive','exclusive') NOT NULL DEFAULT 'exclusive',
+  `taxrate_id` int(10) unsigned NOT NULL,
+  `tax` varchar(20) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `item_quantity` int unsigned NOT NULL,
-  `item_total` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `item_quantity` int(10) unsigned NOT NULL,
+  `item_total` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ref_no` (`ref_no`),
@@ -671,65 +671,65 @@ CREATE TABLE IF NOT EXISTS `holding_item` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.holding_item: ~2 rows (aproximadamente)
-INSERT INTO `holding_item` (`id`, `ref_no`, `store_id`, `item_id`, `category_id`, `brand_id`, `sup_id`, `item_name`, `item_price`, `item_discount`, `item_tax`, `tax_method`, `taxrate_id`, `tax`, `gst`, `cgst`, `sgst`, `igst`, `item_quantity`, `item_total`, `created_at`) VALUES
+REPLACE INTO `holding_item` (`id`, `ref_no`, `store_id`, `item_id`, `category_id`, `brand_id`, `sup_id`, `item_name`, `item_price`, `item_discount`, `item_tax`, `tax_method`, `taxrate_id`, `tax`, `gst`, `cgst`, `sgst`, `igst`, `item_quantity`, `item_total`, `created_at`) VALUES
 	(3, 'ab4250', 1, 7, 3, 0, 6, 'TARI', 2.5000, 0.0000, 0.4500, 'inclusive', 2, '18.0000', '18.0000', 0.0000, 0.0000, 0.4500, 1, 2.5000, NULL),
 	(4, 'b504e5', 1, 2, 6, 0, 2, 'INKA KOLA', 7.5000, 0.0000, 1.3500, 'inclusive', 2, '18.0000', '18.0000', 0.6750, 0.6750, 0.0000, 1, 7.5000, NULL);
 
 -- Volcando estructura para tabla adminsoft.holding_price
 CREATE TABLE IF NOT EXISTS `holding_price` (
-  `price_id` int NOT NULL AUTO_INCREMENT,
-  `ref_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `subtotal` decimal(25,4) DEFAULT '0.0000',
-  `discount_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `discount_amount` decimal(25,4) DEFAULT '0.0000',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `order_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `price_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ref_no` varchar(100) NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `subtotal` decimal(25,4) DEFAULT 0.0000,
+  `discount_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `discount_amount` decimal(25,4) DEFAULT 0.0000,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `order_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `shipping_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `shipping_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `others_charge` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `payable_amount` decimal(25,4) DEFAULT '0.0000',
+  `shipping_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `shipping_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `others_charge` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `payable_amount` decimal(25,4) DEFAULT 0.0000,
   PRIMARY KEY (`price_id`),
   KEY `ref_no` (`ref_no`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.holding_price: ~2 rows (aproximadamente)
-INSERT INTO `holding_price` (`price_id`, `ref_no`, `store_id`, `subtotal`, `discount_type`, `discount_amount`, `item_tax`, `order_tax`, `cgst`, `sgst`, `igst`, `shipping_type`, `shipping_amount`, `others_charge`, `payable_amount`) VALUES
+REPLACE INTO `holding_price` (`price_id`, `ref_no`, `store_id`, `subtotal`, `discount_type`, `discount_amount`, `item_tax`, `order_tax`, `cgst`, `sgst`, `igst`, `shipping_type`, `shipping_amount`, `others_charge`, `payable_amount`) VALUES
 	(3, 'ab4250', 1, 2.5000, 'plain', 0.0000, 0.4500, 0.0000, 0.0000, 0.0000, 0.4500, 'plain', 0.0000, 0.0000, 2.5000),
 	(4, 'b504e5', 1, 7.5000, 'plain', 0.0000, 1.3500, 0.0000, 0.6750, 0.6750, 0.0000, 'plain', 0.0000, 0.0000, 7.5000);
 
 -- Volcando estructura para tabla adminsoft.income_sources
 CREATE TABLE IF NOT EXISTS `income_sources` (
-  `source_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `source_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `source_name` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `type` enum('credit','debit') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'credit',
+  `type` enum('credit','debit') NOT NULL DEFAULT 'credit',
   `source_slug` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `parent_id` int unsigned NOT NULL DEFAULT '0',
-  `source_details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `for_sell` tinyint(1) NOT NULL DEFAULT '0',
-  `for_purchase_return` tinyint(1) NOT NULL DEFAULT '0',
-  `for_due_collection` tinyint(1) NOT NULL DEFAULT '0',
-  `for_loan` tinyint(1) NOT NULL DEFAULT '0',
-  `for_giftcard_sell` tinyint(1) NOT NULL DEFAULT '0',
-  `for_topup` tinyint(1) NOT NULL DEFAULT '0',
-  `for_stock_transfer` tinyint(1) NOT NULL DEFAULT '0',
-  `for_purchase_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `for_expense_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `profitable` enum('yes','no') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'yes',
-  `show_in_income` enum('yes','no') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'yes',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `is_hide` tinyint(1) NOT NULL DEFAULT '0',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `parent_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `source_details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `for_sell` tinyint(1) NOT NULL DEFAULT 0,
+  `for_purchase_return` tinyint(1) NOT NULL DEFAULT 0,
+  `for_due_collection` tinyint(1) NOT NULL DEFAULT 0,
+  `for_loan` tinyint(1) NOT NULL DEFAULT 0,
+  `for_giftcard_sell` tinyint(1) NOT NULL DEFAULT 0,
+  `for_topup` tinyint(1) NOT NULL DEFAULT 0,
+  `for_stock_transfer` tinyint(1) NOT NULL DEFAULT 0,
+  `for_purchase_delete` tinyint(1) NOT NULL DEFAULT 0,
+  `for_expense_delete` tinyint(1) NOT NULL DEFAULT 0,
+  `profitable` enum('yes','no') NOT NULL DEFAULT 'yes',
+  `show_in_income` enum('yes','no') NOT NULL DEFAULT 'yes',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `is_hide` tinyint(1) NOT NULL DEFAULT 0,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`source_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.income_sources: ~10 rows (aproximadamente)
-INSERT INTO `income_sources` (`source_id`, `source_name`, `type`, `source_slug`, `parent_id`, `source_details`, `for_sell`, `for_purchase_return`, `for_due_collection`, `for_loan`, `for_giftcard_sell`, `for_topup`, `for_stock_transfer`, `for_purchase_delete`, `for_expense_delete`, `profitable`, `show_in_income`, `status`, `is_hide`, `sort_order`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `income_sources` (`source_id`, `source_name`, `type`, `source_slug`, `parent_id`, `source_details`, `for_sell`, `for_purchase_return`, `for_due_collection`, `for_loan`, `for_giftcard_sell`, `for_topup`, `for_stock_transfer`, `for_purchase_delete`, `for_expense_delete`, `profitable`, `show_in_income`, `status`, `is_hide`, `sort_order`, `created_at`, `updated_at`) VALUES
 	(1, 'Sell', 'credit', 'sell', 0, '', 1, 0, 0, 0, 0, 0, 0, 0, 0, 'yes', 'no', 1, 1, 0, '2019-02-27 04:54:07', '2019-04-29 01:58:28'),
 	(2, 'Purchase Return', 'credit', 'purchase_return', 0, '', 0, 1, 0, 0, 0, 0, 0, 0, 0, 'no', 'yes', 1, 1, 0, '2019-02-27 05:17:43', '2019-04-29 01:58:31'),
 	(3, 'Due Collection', 'credit', 'due_collection', 0, '', 0, 0, 1, 0, 0, 0, 0, 0, 0, 'yes', 'no', 1, 1, 0, '2019-03-01 08:04:58', '2019-04-29 01:58:34'),
@@ -743,16 +743,16 @@ INSERT INTO `income_sources` (`source_id`, `source_name`, `type`, `source_slug`,
 
 -- Volcando estructura para tabla adminsoft.installment_orders
 CREATE TABLE IF NOT EXISTS `installment_orders` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `duration` int NOT NULL,
-  `interval_count` int NOT NULL,
-  `installment_count` int NOT NULL,
-  `interest_percentage` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `interest_amount` decimal(25,2) NOT NULL DEFAULT '0.00',
-  `initial_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `payment_status` enum('paid','due') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'due',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `invoice_id` varchar(100) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `interval_count` int(11) NOT NULL,
+  `installment_count` int(11) NOT NULL,
+  `interest_percentage` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `interest_amount` decimal(25,2) NOT NULL DEFAULT 0.00,
+  `initial_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `payment_status` enum('paid','due') NOT NULL DEFAULT 'due',
   `last_installment_date` datetime DEFAULT NULL,
   `installment_end_date` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -761,47 +761,47 @@ CREATE TABLE IF NOT EXISTS `installment_orders` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.installment_orders: ~3 rows (aproximadamente)
-INSERT INTO `installment_orders` (`id`, `store_id`, `invoice_id`, `duration`, `interval_count`, `installment_count`, `interest_percentage`, `interest_amount`, `initial_amount`, `payment_status`, `last_installment_date`, `installment_end_date`, `created_at`) VALUES
+REPLACE INTO `installment_orders` (`id`, `store_id`, `invoice_id`, `duration`, `interval_count`, `installment_count`, `interest_percentage`, `interest_amount`, `initial_amount`, `payment_status`, `last_installment_date`, `installment_end_date`, `created_at`) VALUES
 	(1, 1, '12021/00000016', 15, 30, 0, 3.0000, 0.22, 7.5000, 'due', '2021-02-18 13:28:36', '2021-03-05 13:28:36', '2021-02-18 13:28:36'),
 	(2, 1, '12021/00000017', 16, 30, 0, 0.0000, 0.00, 100.0000, 'due', '2021-02-18 13:30:48', '2021-03-06 13:30:48', '2021-02-18 13:30:48'),
 	(3, 1, '12021/00000021', 15, 30, 0, 3.0000, 3.00, 103.0000, 'due', '2021-02-18 17:22:59', '2021-03-05 17:22:59', '2021-02-18 17:22:59');
 
 -- Volcando estructura para tabla adminsoft.installment_payments
 CREATE TABLE IF NOT EXISTS `installment_payments` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `invoice_id` varchar(100) NOT NULL,
   `payment_date` datetime DEFAULT NULL,
-  `pmethod_id` int NOT NULL DEFAULT '1',
-  `created_by` int NOT NULL,
-  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `pmethod_id` int(11) NOT NULL DEFAULT 1,
+  `created_by` int(11) NOT NULL,
+  `note` text DEFAULT NULL,
   `capital` decimal(25,4) NOT NULL,
-  `interest` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `interest` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `payable` decimal(25,4) NOT NULL,
-  `paid` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `due` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `payment_status` enum('paid','due','pending','cancel') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'due',
+  `paid` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `due` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `payment_status` enum('paid','due','pending','cancel') NOT NULL DEFAULT 'due',
   PRIMARY KEY (`id`),
   KEY `invoice_id` (`invoice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.installment_payments: ~3 rows (aproximadamente)
-INSERT INTO `installment_payments` (`id`, `store_id`, `invoice_id`, `payment_date`, `pmethod_id`, `created_by`, `note`, `capital`, `interest`, `payable`, `paid`, `due`, `payment_status`) VALUES
+REPLACE INTO `installment_payments` (`id`, `store_id`, `invoice_id`, `payment_date`, `pmethod_id`, `created_by`, `note`, `capital`, `interest`, `payable`, `paid`, `due`, `payment_status`) VALUES
 	(1, 1, '12021/00000016', '2021-02-18 13:28:37', 1, 1, 'Initial Payment', 4.8544, 0.2184, 7.5000, 7.5000, 0.0000, 'paid'),
 	(2, 1, '12021/00000017', '2021-02-18 13:30:49', 1, 1, 'Initial Payment', 80.0000, 0.0000, 100.0000, 100.0000, 0.0000, 'paid'),
 	(3, 1, '12021/00000021', '2021-02-18 17:23:01', 1, 1, 'Initial Payment', 80.0000, 3.0000, 103.0000, 103.0000, 0.0000, 'paid');
 
 -- Volcando estructura para tabla adminsoft.languages
 CREATE TABLE IF NOT EXISTS `languages` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `slug` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `slug` varchar(50) NOT NULL,
+  `code` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.languages: ~7 rows (aproximadamente)
-INSERT INTO `languages` (`id`, `name`, `slug`, `code`) VALUES
+REPLACE INTO `languages` (`id`, `name`, `slug`, `code`) VALUES
 	(1, 'English', 'english', 'en'),
 	(2, 'Arabic', 'arabic', 'ar'),
 	(3, 'Bangla', 'bangla', 'bn'),
@@ -812,16 +812,16 @@ INSERT INTO `languages` (`id`, `name`, `slug`, `code`) VALUES
 
 -- Volcando estructura para tabla adminsoft.language_translations
 CREATE TABLE IF NOT EXISTS `language_translations` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `lang_id` int NOT NULL,
-  `lang_key` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `key_type` enum('specific','default') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'specific',
-  `lang_value` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lang_id` int(11) NOT NULL,
+  `lang_key` varchar(100) NOT NULL,
+  `key_type` enum('specific','default') NOT NULL DEFAULT 'specific',
+  `lang_value` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11170 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.language_translations: ~2,825 rows (aproximadamente)
-INSERT INTO `language_translations` (`id`, `lang_id`, `lang_key`, `key_type`, `lang_value`) VALUES
+REPLACE INTO `language_translations` (`id`, `lang_id`, `lang_key`, `key_type`, `lang_value`) VALUES
 	(1, 1, 'title_dashboard', 'specific', 'Dashboard'),
 	(2, 1, 'text_arabic', 'specific', 'Arabic'),
 	(3, 1, 'text_french', 'specific', 'French'),
@@ -3650,20 +3650,20 @@ INSERT INTO `language_translations` (`id`, `lang_id`, `lang_key`, `key_type`, `l
 
 -- Volcando estructura para tabla adminsoft.loans
 CREATE TABLE IF NOT EXISTS `loans` (
-  `loan_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `ref_no` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `loan_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ref_no` varchar(50) NOT NULL,
   `loan_from` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `title` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `amount` decimal(25,4) unsigned NOT NULL,
-  `interest` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `interest` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `payable` decimal(25,4) unsigned NOT NULL,
-  `paid` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `due` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
+  `paid` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `due` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
   `details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `attachment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
-  `created_by` int unsigned NOT NULL,
+  `attachment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `created_by` int(10) unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`loan_id`)
@@ -3673,12 +3673,12 @@ CREATE TABLE IF NOT EXISTS `loans` (
 
 -- Volcando estructura para tabla adminsoft.loan_payments
 CREATE TABLE IF NOT EXISTS `loan_payments` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `lloan_id` int unsigned NOT NULL,
-  `ref_no` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lloan_id` int(10) unsigned NOT NULL,
+  `ref_no` varchar(50) DEFAULT NULL,
   `paid` decimal(25,4) NOT NULL,
-  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `created_by` int unsigned NOT NULL,
+  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `created_by` int(10) unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -3689,18 +3689,18 @@ CREATE TABLE IF NOT EXISTS `loan_payments` (
 
 -- Volcando estructura para tabla adminsoft.login_logs
 CREATE TABLE IF NOT EXISTS `login_logs` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int unsigned DEFAULT NULL,
-  `username` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ip` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` enum('success','error') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'success',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `ip` varchar(50) DEFAULT NULL,
+  `status` enum('success','error') NOT NULL DEFAULT 'success',
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.login_logs: ~40 rows (aproximadamente)
-INSERT INTO `login_logs` (`id`, `user_id`, `username`, `ip`, `status`, `created_at`) VALUES
+REPLACE INTO `login_logs` (`id`, `user_id`, `username`, `ip`, `status`, `created_at`) VALUES
 	(1, 1, 'tusolutionweb@gmail.com', '201.240.205.187', 'success', NULL),
 	(2, 1, 'tusolutionweb@gmail.com', '201.240.205.187', 'success', NULL),
 	(3, 1, 'tusolutionweb@gmail.com', '201.240.205.187', 'success', NULL),
@@ -3744,15 +3744,15 @@ INSERT INTO `login_logs` (`id`, `user_id`, `username`, `ip`, `status`, `created_
 
 -- Volcando estructura para tabla adminsoft.mail_sms_tag
 CREATE TABLE IF NOT EXISTS `mail_sms_tag` (
-  `tag_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `tagname` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `tag_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) DEFAULT NULL,
+  `tagname` varchar(128) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`tag_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.mail_sms_tag: ~14 rows (aproximadamente)
-INSERT INTO `mail_sms_tag` (`tag_id`, `type`, `tagname`, `created_at`) VALUES
+REPLACE INTO `mail_sms_tag` (`tag_id`, `type`, `tagname`, `created_at`) VALUES
 	(1, 'invoice', '[customer_name]', '2019-03-08 14:50:39'),
 	(2, 'invoice', '[payable_amount]', '2019-07-02 12:12:59'),
 	(3, 'invoice', '[paid_amount]', '2019-07-02 12:13:02'),
@@ -3770,30 +3770,30 @@ INSERT INTO `mail_sms_tag` (`tag_id`, `type`, `tagname`, `created_at`) VALUES
 
 -- Volcando estructura para tabla adminsoft.payments
 CREATE TABLE IF NOT EXISTS `payments` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'sell',
-  `is_profit` tinyint(1) NOT NULL DEFAULT '1',
-  `is_hide` tinyint(1) NOT NULL DEFAULT '0',
-  `store_id` int unsigned NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `reference_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `pmethod_id` int unsigned DEFAULT NULL,
-  `transaction_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `capital` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) NOT NULL DEFAULT 'sell',
+  `is_profit` tinyint(1) NOT NULL DEFAULT 1,
+  `is_hide` tinyint(1) NOT NULL DEFAULT 0,
+  `store_id` int(10) unsigned NOT NULL,
+  `invoice_id` varchar(100) DEFAULT NULL,
+  `reference_no` varchar(100) DEFAULT NULL,
+  `pmethod_id` int(10) unsigned DEFAULT NULL,
+  `transaction_id` varchar(50) DEFAULT NULL,
+  `capital` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `amount` decimal(25,4) NOT NULL,
-  `details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `attachment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `total_paid` decimal(25,4) DEFAULT '0.0000',
-  `pos_balance` decimal(25,4) DEFAULT '0.0000',
-  `created_by` int NOT NULL,
+  `details` text DEFAULT NULL,
+  `attachment` text DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `total_paid` decimal(25,4) DEFAULT 0.0000,
+  `pos_balance` decimal(25,4) DEFAULT 0.0000,
+  `created_by` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `invoice_id` (`invoice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.payments: ~28 rows (aproximadamente)
-INSERT INTO `payments` (`id`, `type`, `is_profit`, `is_hide`, `store_id`, `invoice_id`, `reference_no`, `pmethod_id`, `transaction_id`, `capital`, `amount`, `details`, `attachment`, `note`, `total_paid`, `pos_balance`, `created_by`, `created_at`) VALUES
+REPLACE INTO `payments` (`id`, `type`, `is_profit`, `is_hide`, `store_id`, `invoice_id`, `reference_no`, `pmethod_id`, `transaction_id`, `capital`, `amount`, `details`, `attachment`, `note`, `total_paid`, `pos_balance`, `created_by`, `created_at`) VALUES
 	(1, 'sell', 1, 0, 1, '100000001', NULL, 1, NULL, 2500.0000, 3000.0000, 'a:0:{}', NULL, '', 4000.0000, 1000.0000, 1, '2019-12-15 12:19:46'),
 	(2, 'sell', 1, 0, 1, '100000002', NULL, 2, NULL, 7500.0000, 9000.0000, 'a:2:{s:12:"bkash_trx_id";s:0:"";s:14:"bkash_phone_no";s:0:"";}', NULL, '', 10000.0000, 1000.0000, 1, '2021-01-20 19:49:33'),
 	(3, 'sell', 1, 0, 1, '100000003', NULL, 1, NULL, 5000.0000, 6000.0000, 'a:0:{}', NULL, '', 6000.0000, 0.0000, 1, '2021-01-20 19:50:10'),
@@ -3825,17 +3825,17 @@ INSERT INTO `payments` (`id`, `type`, `is_profit`, `is_hide`, `store_id`, `invoi
 
 -- Volcando estructura para tabla adminsoft.pmethods
 CREATE TABLE IF NOT EXISTS `pmethods` (
-  `pmethod_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `pmethod_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `code_name` varchar(50) NOT NULL,
+  `details` text DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`pmethod_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.pmethods: ~5 rows (aproximadamente)
-INSERT INTO `pmethods` (`pmethod_id`, `name`, `code_name`, `details`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `pmethods` (`pmethod_id`, `name`, `code_name`, `details`, `created_at`, `updated_at`) VALUES
 	(1, 'Cash on Delivery', 'cod', 'Payment method details goes here...', '2018-03-23 18:00:00', '2019-05-08 18:18:30'),
 	(2, 'Bkash', 'bkash', 'Bkash a Brack Bank Service', '2019-01-09 18:00:00', '2019-07-02 16:13:57'),
 	(3, 'Gift card', 'gift_card', 'Details of giftcard payment method', '2019-02-04 11:32:44', '2019-07-02 21:41:57'),
@@ -3844,17 +3844,17 @@ INSERT INTO `pmethods` (`pmethod_id`, `name`, `code_name`, `details`, `created_a
 
 -- Volcando estructura para tabla adminsoft.pmethod_to_store
 CREATE TABLE IF NOT EXISTS `pmethod_to_store` (
-  `p2s_id` int NOT NULL AUTO_INCREMENT,
-  `ppmethod_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `p2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ppmethod_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`p2s_id`),
   KEY `ppmethod_id` (`ppmethod_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.pmethod_to_store: ~25 rows (aproximadamente)
-INSERT INTO `pmethod_to_store` (`p2s_id`, `ppmethod_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `pmethod_to_store` (`p2s_id`, `ppmethod_id`, `store_id`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 1),
 	(2, 2, 1, 1, 2),
 	(4, 4, 1, 1, 4),
@@ -3883,52 +3883,52 @@ INSERT INTO `pmethod_to_store` (`p2s_id`, `ppmethod_id`, `store_id`, `status`, `
 
 -- Volcando estructura para tabla adminsoft.pos_register
 CREATE TABLE IF NOT EXISTS `pos_register` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `opening_balance` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `closing_balance` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `opening_balance` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `closing_balance` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `note` text DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.pos_register: ~0 rows (aproximadamente)
-INSERT INTO `pos_register` (`id`, `store_id`, `opening_balance`, `closing_balance`, `note`, `status`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `pos_register` (`id`, `store_id`, `opening_balance`, `closing_balance`, `note`, `status`, `created_at`, `updated_at`) VALUES
 	(1, 1, 100.0000, 0.0000, NULL, 1, '2019-12-15 12:23:49', NULL);
 
 -- Volcando estructura para tabla adminsoft.pos_templates
 CREATE TABLE IF NOT EXISTS `pos_templates` (
-  `template_id` int NOT NULL AUTO_INCREMENT,
+  `template_id` int(11) NOT NULL AUTO_INCREMENT,
   `template_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `template_content` longtext CHARACTER SET ucs2 COLLATE ucs2_general_ci NOT NULL,
-  `template_css` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `template_css` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `created_by` int unsigned NOT NULL,
+  `created_by` int(10) unsigned NOT NULL,
   PRIMARY KEY (`template_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.pos_templates: ~2 rows (aproximadamente)
-INSERT INTO `pos_templates` (`template_id`, `template_name`, `template_content`, `template_css`, `created_at`, `updated_at`, `created_by`) VALUES
+REPLACE INTO `pos_templates` (`template_id`, `template_name`, `template_content`, `template_css`, `created_at`, `updated_at`, `created_by`) VALUES
 	(1, 'Default', '&lt;section class=&quot;receipt-template&quot;&gt;\n\n        &lt;header class=&quot;receipt-header&quot;&gt;\n            &lt;div class=&quot;logo-area&quot;&gt;\n                &lt;img class=&quot;logo&quot; src=&quot;{{ logo_url }}&quot;&gt;\n            &lt;/div&gt;\n            &lt;h2 class=&quot;store-name&quot;&gt;{{ store_name }}&lt;/h2&gt;\n            &lt;div class=&quot;address-area&quot;&gt;\n                &lt;span class=&quot;info address&quot;&gt;{{ store_address }}&lt;/span&gt;\n                &lt;div class=&quot;block&quot;&gt;\n                    &lt;span class=&quot;info phone&quot;&gt;Mobile: {{ store_phone }}&lt;/span&gt;, &lt;span class=&quot;info email&quot;&gt;Email: {{ store_email }}&lt;/span&gt;\n                &lt;/div&gt;\n            &lt;/div&gt;\n        &lt;/header&gt;\n        \n        &lt;section class=&quot;info-area&quot;&gt;\n            &lt;table&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;&lt;span&gt;Invoice ID:&lt;/td&gt;\n                    &lt;td&gt;{{ invoice_id }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;VAT-Reg:&lt;/td&gt;\n                    &lt;td&gt;{{ vat_reg }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;&lt;span&gt;Date:&lt;/td&gt;\n                    &lt;td&gt;{{ date_time }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;&lt;span&gt;GST Reg:&lt;/td&gt;\n                    &lt;td&gt;{{ gst_reg }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;Customer Name:&lt;/td&gt;\n                    &lt;td&gt;{{ customer_name }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;Customer Phone:&lt;/td&gt;\n                    &lt;td&gt;{{ customer_phone }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-30&quot;&gt;GTIN:&lt;/td&gt;\n                    &lt;td&gt;{{ gtin }}&lt;/td&gt;\n                &lt;/tr&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        \n        &lt;h4 class=&quot;main-title&quot;&gt;INVOICE&lt;/h4&gt;\n        \n        {{ if items }}\n        &lt;section class=&quot;listing-area item-list&quot;&gt;\n            &lt;table&gt;\n                &lt;thead&gt;\n                    &lt;tr&gt;\n                        &lt;td class=&quot;w-10 text-center&quot;&gt;Sl.&lt;/td&gt;\n                        &lt;td class=&quot;w-40 text-center&quot;&gt;Name&lt;/td&gt;\n                        &lt;td class=&quot;w-15 text-center&quot;&gt;Qty&lt;/td&gt;\n                        &lt;td class=&quot;w-15 text-right&quot;&gt;Price&lt;/td&gt;\n                        &lt;td class=&quot;w-20 text-right&quot;&gt;Amount&lt;/td&gt;\n                    &lt;/tr&gt;\n                &lt;/thead&gt;\n                &lt;tbody&gt;\n                    {{ items }}\n                        &lt;tr&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ sl }}&lt;/td&gt;\n                            &lt;td&gt;{{ item_name }} \n                                {{ if invoice_view == indian_gst }} \n                                    &lt;small&gt;[HSN-{{ hsn_code }}]&lt;/small&gt;\n                                {{ endif }}\n                            &lt;/td&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ item_quantity }} {{ unitName }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_price }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_total }}&lt;/td&gt;   \n                        &lt;/tr&gt;\n                    {{ /items }}\n                &lt;/tbody&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        {{ endif }}\n        \n        &lt;section class=&quot;info-area calculation-area&quot;&gt;\n            &lt;table&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Total Amt:&lt;/td&gt;\n                    &lt;td&gt;{{ subtotal }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Order Tax:&lt;/td&gt;\n                    &lt;td&gt;{{ order_tax }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Discount:&lt;/td&gt;\n                    &lt;td&gt;{{ discount_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Shipping Chrg:&lt;/td&gt;\n                    &lt;td&gt;{{ shipping_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Others Chrg:&lt;/td&gt;\n                    &lt;td&gt;{{ others_charge }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Previous Due:&lt;/td&gt;\n                    &lt;td&gt;{{ previous_due }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Total Due:&lt;/td&gt;\n                    &lt;td&gt;{{ payable_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Amount Paid:&lt;/td&gt;\n                    &lt;td&gt;{{ paid_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Change:&lt;/td&gt;\n                    &lt;td&gt;{{ change }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Due:&lt;/td&gt;\n                    &lt;td&gt;{{ due }}&lt;/td&gt;\n                &lt;/tr&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        \n        &lt;section class=&quot;info-area italic&quot;&gt;\n            &lt;span class=&quot;text-small&quot;&gt;&lt;b&gt;In Text:&lt;/b&gt; {{ amount_in_text }}&lt;/span&gt;&lt;br&gt;\n            &lt;span class=&quot;text-small&quot;&gt;&lt;b&gt;Note:&lt;/b&gt; {{ invoice_note }}&lt;/span&gt;\n        &lt;/section&gt;\n\n        {{ if return_items }}\n        &lt;section class=&quot;listing-area payment-list&quot;&gt;\n            &lt;div class=&quot;heading&quot;&gt;\n                &lt;h2 class=&quot;sub-title&quot;&gt;Returns&lt;/h2&gt;\n            &lt;/div&gt;\n            &lt;table&gt;\n                &lt;thead&gt;\n                    &lt;td class=&quot;w-5 text-center&quot;&gt;Sl.&lt;/td&gt;\n                    &lt;td class=&quot;w-25 text-center&quot;&gt;Returned at&lt;/td&gt;\n                    &lt;td class=&quot;w-30 text-center&quot;&gt;Item Name&lt;/td&gt;\n                    &lt;td class=&quot;w-20 text-right&quot;&gt;Qty&lt;/td&gt;\n                    &lt;td class=&quot;w-20 text-right&quot;&gt;Amt&lt;/td&gt;\n                &lt;/thead&gt;\n                &lt;tbody&gt;\n                    {{return_items}}\n                        &lt;tr&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ sl }}&lt;/td&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ created_at }}&lt;/td&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ item_name }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_quantity }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_total }}&lt;/td&gt; \n                        &lt;/tr&gt;\n                    {{/return_items}}\n                &lt;/tbody&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        {{ endif }}\n        \n        {{ if payments }}\n        &lt;section class=&quot;listing-area payment-list&quot;&gt;\n            &lt;div class=&quot;heading&quot;&gt;\n                &lt;h2 class=&quot;sub-title&quot;&gt;Payments&lt;/h2&gt;\n            &lt;/div&gt;\n            &lt;table&gt;\n                &lt;thead&gt;\n                    &lt;td class=&quot;w-10 text-center&quot;&gt;Sl.&lt;/td&gt;\n                    &lt;td class=&quot;w-50 text-center&quot;&gt;Payment Method&lt;/td&gt;\n                    &lt;td class=&quot;w-20 text-right&quot;&gt;Amount&lt;/td&gt;\n                    &lt;td class=&quot;w-20 text-right&quot;&gt;Balance&lt;/td&gt;\n                &lt;/thead&gt;\n                &lt;tbody&gt;\n                    {{ payments }}\n                        &lt;tr&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ sl }}&lt;/td&gt;\n                            &lt;td&gt;{{ name }} by {{ by }} on {{ created_at }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ amount }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ pos_balance }}&lt;/td&gt; \n                        &lt;/tr&gt;\n                    {{ /payments }}\n                &lt;/tbody&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        {{ endif }}\n           \n        {{ if invoice_view != \'standard\' }}\n        {{ if taxes }}\n        &lt;section class=&quot;listing-area payment-list&quot;&gt;\n            &lt;div class=&quot;heading&quot;&gt;\n                &lt;h2 class=&quot;sub-title&quot;&gt;Tax Information&lt;/h2&gt;\n            &lt;/div&gt;\n            &lt;table&gt;\n                &lt;thead&gt;\n                    &lt;td class=&quot;w-25&quot;&gt;Name&lt;/td&gt;\n                    &lt;td class=&quot;w-25 text-center&quot;&gt;Code&lt;/td&gt;\n                    &lt;td class=&quot;w-25 text-right&quot;&gt;Qty&lt;/td&gt;\n                    &lt;td class=&quot;w-25 text-right&quot;&gt;Tax Amt.&lt;/td&gt;\n                &lt;/thead&gt;\n                &lt;tbody&gt;\n                    {{ taxes }}\n                        &lt;tr&gt;\n                            &lt;td&gt;{{ taxrate_name }}&lt;/td&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ code_name }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ qty }}&lt;/td&gt; \n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_tax }}&lt;/td&gt; \n                        &lt;/tr&gt;\n                    {{ /taxes }}\n                    {{ if invoice_view == \'indian_gst\' }}\n                        &lt;tr class=&quot;bg-gray&quot;&gt;\n                            &lt;td&gt;Order Tax: {{ order_tax }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;CGST: {{ cgst }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;SGST: {{ sgst }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;IGST: {{ igst }}&lt;/td&gt;\n                        &lt;/tr&gt;\n                     {{ endif }}\n                &lt;/tbody&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        {{ endif }}\n        {{ endif }}\n        \n        {{ if barcode }}\n        &lt;section class=&quot;info-area barcode-area&quot;&gt;\n            {{ barcode }}\n        &lt;/section&gt;\n        {{ endif }}\n        \n        &lt;section class=&quot;info-area align-center footer-area&quot;&gt;\n            &lt;span class=&quot;block&quot;&gt;Sold product No Claim. No Change, New product One Month Warranty.&lt;/span&gt;\n            &lt;span class=&quot;block bold&quot;&gt;{{ footer_text }}&lt;/span&gt;\n        &lt;/section&gt;\n        \n &lt;/section&gt;', '/*Common CSS*/\n        .receipt-template {\n            width:302px;\n            margin:0 auto;\n        }\n        .receipt-template .text-small {\n            font-size: 10px;\n        }\n        .receipt-template .block {\n            display: block;\n        }\n        .receipt-template .inline-block {\n            display: inline-block;\n        }\n        .receipt-template .bold {\n            font-weight: 700;\n        }\n        .receipt-template .italic {\n            font-style: italic;\n        }\n        .receipt-template .align-right {\n            text-align: right;\n        }\n        .receipt-template .align-center {\n            text-align: center;\n        }\n        .receipt-template .main-title {\n            font-size: 14px;\n            font-weight: 700;\n            text-align: center;\n            margin: 10px 0 5px 0;\n            padding: 0;\n        }\n        .receipt-template .heading {\n            position: relation;\n        }\n        .receipt-template .title {\n            font-size: 16px;\n            font-weight: 700;\n            margin: 10px 0 5px 0;\n        }\n        .receipt-template .sub-title {\n            font-size: 12px;\n            font-weight: 700;\n            margin: 10px 0 5px 0;\n        }\n        .receipt-template table {\n            width: 100%;\n        }\n        .receipt-template td,\n        .receipt-template th {\n            font-size:12px;\n        }\n        .receipt-template .info-area {\n            font-size: 12px;      \n            line-height: 1.222;  \n        }\n        .receipt-template .listing-area {\n            line-height: 1.222;\n        }\n        .receipt-template .listing-area table {}\n        .receipt-template .listing-area table thead tr {\n            border-top: 1px solid #000;\n            border-bottom: 1px solid #000;\n            font-weight: 700;\n        }\n        .receipt-template .listing-area table tbody tr {\n            border-top: 1px dashed #000;\n            border-bottom: 1px dashed #000;\n        }\n        .receipt-template .listing-area table tbody tr:last-child {\n            border-bottom: none;\n        }\n        .receipt-template .listing-area table td {\n            vertical-align: top;\n        }\n        .receipt-template .info-area table {}\n        .receipt-template .info-area table thead tr {\n            border-top: 1px solid #000;\n            border-bottom: 1px solid #000;\n        }\n    \n /*Receipt Heading*/\n        .receipt-template .receipt-header {\n            text-align: center;\n        }\n        .receipt-template .receipt-header .logo-area {\n            width: 80px;\n            height: 80px;\n            margin: 0 auto;\n        }\n        .receipt-template .receipt-header .logo-area img.logo {\n            display: inline-block;\n            max-width: 100%;\n            max-height: 100%;\n        }\n        .receipt-template .receipt-header .address-area {\n            margin-bottom: 5px;\n            line-height: 1;\n        }\n        .receipt-template .receipt-header .info {\n            font-size: 12px;\n        }\n        .receipt-template .receipt-header .store-name {\n            font-size: 24px;\n            font-weight: 700;\n            margin: 0;\n            padding: 0;\n        }\n        \n        \n/*Invoice Info Area*/ \n    .receipt-template .invoice-info-area {}\n    \n/*Customer Customer Area*/\n    .receipt-template .customer-area {\n        margin-top:10px;\n    }\n\n/*Calculation Area*/\n    .receipt-template .calculation-area {\n        border-top: 2px solid #000;\n        font-weight: bold;\n    }\n    .receipt-template .calculation-area table td {\n        text-align: right;\n    }\n    .receipt-template .calculation-area table td:nth-child(2) {\n        border-bottom: 1px dashed #000;\n    }\n\n/*Item Listing*/\n    .receipt-template .item-list table tr {\n    }\n    \n/*Barcode Area*/\n    .receipt-template .barcode-area {\n        margin-top: 10px;\n        text-align: center;\n    }\n    .receipt-template .barcode-area img {\n        max-width: 100%;\n        display: inline-block;\n    }\n    \n/*Footer Area*/\n    .receipt-template .footer-area {\n        line-height: 1.222;\n        font-size: 10px;\n    }\n \n/*Media Query*/\n    @media print {\n        .receipt-template {\n            width: 100%;\n        }\n    }\n    @media all and (max-width: 215px) {}', '2019-05-10 12:35:05', '2019-07-02 21:06:02', 1),
 	(2, 'Minimal', '&lt;section class=&quot;receipt-template&quot;&gt;\n\n        &lt;header class=&quot;receipt-header&quot;&gt;\n            &lt;div class=&quot;logo-area&quot;&gt;\n                &lt;img class=&quot;logo&quot; src=&quot;{{  logo_url  }}&quot;&gt;\n            &lt;/div&gt;\n            &lt;h2 class=&quot;store-name&quot;&gt;{{ store_name }}&lt;/h2&gt;\n            &lt;div class=&quot;address-area&quot;&gt;\n                &lt;span class=&quot;info address&quot;&gt;{{ store_address }}&lt;/span&gt;\n                &lt;div class=&quot;block&quot;&gt;\n                    &lt;span class=&quot;info phone&quot;&gt;Mobile: {{ store_phone }}&lt;/span&gt;, &lt;span class=&quot;info email&quot;&gt;Email: {{ store_email }}&lt;/span&gt;\n                &lt;/div&gt;\n            &lt;/div&gt;\n        &lt;/header&gt;\n        \n        &lt;div class=&quot;heading&quot;&gt;\n            &lt;h2 class=&quot;title text-center zero-around title-lg&quot;&gt;INVOICE&lt;/h2&gt;\n        &lt;/div&gt;\n        \n        &lt;section class=&quot;info-area&quot;&gt;\n            &lt;table&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-10&quot;&gt;&lt;span&gt;Bill #:&lt;/td&gt;\n                    &lt;td class=&quot;w-40 text-center sinfo billno&quot;&gt;&lt;span&gt;{{ invoice_id }}&lt;/span&gt;&lt;/td&gt;\n                    &lt;td class=&quot;w-10 text-right&quot;&gt;&lt;span&gt;Date:&lt;/td&gt;\n                    &lt;td class=&quot;w-40 text-center sinfo date&quot;&gt;&lt;span&gt;{{ date_time }}&lt;/span&gt;&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-10&quot;&gt;M/S:&lt;/td&gt;\n                    &lt;td class=&quot;w-90&quot; colspan=&quot;3&quot;&gt;&lt;span class=&quot;text-lg&quot;&gt;{{ customer_name }}&lt;/span&gt;&lt;/td&gt;\n                &lt;/tr&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        \n        &lt;section class=&quot;listing-area item-list&quot;&gt;\n            &lt;table&gt;\n                &lt;thead&gt;\n                    &lt;tr&gt;\n                        &lt;td class=&quot;w-40 text-center&quot;&gt;DESC.&lt;/td&gt;\n                        &lt;td class=&quot;w-15 text-center&quot;&gt;Qty&lt;/td&gt;\n                        &lt;td class=&quot;w-15 text-right&quot;&gt;Price&lt;/td&gt;\n                        &lt;td class=&quot;w-20 text-right&quot;&gt;AMT&lt;/td&gt;\n                    &lt;/tr&gt;\n                &lt;/thead&gt;\n                &lt;tbody&gt;\n                    {{ items }}\n                        &lt;tr&gt;\n                            &lt;td&gt;{{ item_name }}&lt;/td&gt;\n                            &lt;td class=&quot;text-center&quot;&gt;{{ item_quantity }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_price }}&lt;/td&gt;\n                            &lt;td class=&quot;text-right&quot;&gt;{{ item_total }}&lt;/td&gt;   \n                        &lt;/tr&gt;\n                    {{ /items }}\n                &lt;/tbody&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        \n        &lt;section class=&quot;info-area calculation-area&quot;&gt;\n            &lt;table&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Subtotal:&lt;/td&gt;\n                    &lt;td&gt;{{ subtotal }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Order Tax:&lt;/td&gt;\n                    &lt;td&gt;{{ order_tax }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Discount:&lt;/td&gt;\n                    &lt;td&gt;{{ discount_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Shipping Chrg:&lt;/td&gt;\n                    &lt;td&gt;{{ shipping_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Others Chrg:&lt;/td&gt;\n                    &lt;td&gt;{{ others_charge }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Previous Due:&lt;/td&gt;\n                    &lt;td&gt;{{ previous_due }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Amount Total:&lt;/td&gt;\n                    &lt;td&gt;{{ payable_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Amount Paid:&lt;/td&gt;\n                    &lt;td&gt;{{ paid_amount }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Due:&lt;/td&gt;\n                    &lt;td&gt;{{ due }}&lt;/td&gt;\n                &lt;/tr&gt;\n                &lt;tr&gt;\n                    &lt;td class=&quot;w-70&quot;&gt;Change:&lt;/td&gt;\n                    &lt;td&gt;{{ change }}&lt;/td&gt;\n                &lt;/tr&gt;\n            &lt;/table&gt;\n        &lt;/section&gt;\n        \n        &lt;section class=&quot;stylish-footer text-center&quot;&gt;\n            &lt;span&gt;Printed On: {{ printed_on }}&lt;/span&gt;\n        &lt;/section&gt;\n        \n        &lt;section class=&quot;info-area align-center footer-area&quot;&gt;\n            &lt;span class=&quot;block&quot;&gt;Sold product No Claim. No Change, New product One Month Warranty.&lt;/span&gt;\n            &lt;span class=&quot;block bold&quot;&gt;Thank You for Choosing Us.&lt;/span&gt;\n        &lt;/section&gt;\n        \n &lt;/section&gt;', '/*Common CSS*/\n        .receipt-template {\n            width:302px;\n            margin:0 auto;\n        }\n        .receipt-template .text-small {\n            font-size: 10px;\n        }\n        .receipt-template .block {\n            display: block;\n        }\n        .receipt-template .inline-block {\n            display: inline-block;\n        }\n        .receipt-template .bold {\n            font-weight: 700;\n        }\n        .receipt-template .italic {\n            font-style: italic;\n        }\n        .receipt-template .align-right {\n            text-align: right;\n        }\n        .receipt-template .align-center {\n            text-align: center;\n        }\n        .receipt-template .heading {\n            position: relation;\n        }\n        .receipt-template .title {\n            font-size: 16px;\n            font-weight: 700;\n            margin: 10px 0 5px 0;\n        }\n        .receipt-template .sub-title {\n            font-size: 12px;\n            font-weight: 700;\n            margin: 10px 0 5px 0;\n        }\n        .receipt-template table {\n            width: 100%;\n        }\n        .receipt-template td,\n        .receipt-template th {\n            font-size:10px;\n        }\n        .receipt-template .info-area {\n            font-size: 12px;      \n            line-height: 1.222;  \n        }\n        .receipt-template .listing-area {\n            line-height: 1.222;\n        }\n        .receipt-template .listing-area table {}\n        .receipt-template .listing-area table thead tr {\n            border-top: 1px solid #000;\n            border-bottom: 1px solid #000;\n            font-weight: 700;\n        }\n        .receipt-template .listing-area table tbody tr {\n            border-top: 1px dashed #000;\n            border-bottom: 1px dashed #000;\n        }\n        .receipt-template .listing-area table tbody tr:last-child {\n            border-bottom: none;\n        }\n        .receipt-template .listing-area table td {\n            vertical-align: top;\n        }\n        .receipt-template .info-area table {}\n        .receipt-template .info-area table thead tr {\n            border-top: 1px solid #000;\n            border-bottom: 1px solid #000;\n        }\n\n /*Receipt Heading*/\n        .receipt-template .receipt-header {\n            text-align: center;\n        }\n        .receipt-template .receipt-header .logo-area {\n            width: 80px;\n            height: 80px;\n            margin: 0 auto;\n        }\n        .receipt-template .receipt-header .logo-area img.logo {\n            display: inline-block;\n            max-width: 100%;\n            max-height: 100%;\n        }\n        .receipt-template .receipt-header .address-area {\n            margin-bottom: 5px;\n            line-height: 1;\n        }\n        .receipt-template .receipt-header .info {\n            font-size: 12px;\n        }\n        .receipt-template .receipt-header .store-name {\n            font-size: 28px;\n            font-weight: 700;\n            margin: 0;\n            padding: 0;\n        }\n        \n        \n/*Invoice Info Area*/ \n    .receipt-template .invoice-info-area {}\n    \n/*Customer Info Area*/\n    .receipt-template .customer-area {\n        margin-top:10px;\n    }\n\n/*Calculation Area*/\n    .receipt-template .calculation-area {\n        border-top: 2px solid #000;\n    }\n    .receipt-template .calculation-area table td {\n        text-align: right;\n    }\n    .receipt-template .calculation-area table td:nth-child(2) {\n        border-bottom: 1px dashed #000;\n    }\n\n/*Item Listing*/\n    .receipt-template .item-list table tr {\n    }\n    \n/*Barcode Area*/\n    .receipt-template .barcode-area {\n        margin-top: 10px;\n        text-align: center;\n    }\n    .receipt-template .barcode-area img {\n        max-width: 100%;\n        display: inline-block;\n    }\n    \n/*Footer Area*/\n    .receipt-template .footer-area {\n        line-height: 1.222;\n        font-size: 10px;\n    }\n \n/*Media Query*/\n    @media print {\n        .receipt-template {\n            width: 100%;\n        }\n    }\n    @media all and (max-width: 215px) {}\n    \n    \n/* Additional */\n        .receipt-template .zero-around {\n            margin:0;\n            padding: 0;\n        }\n        .receipt-template .title-lg {\n            font-size: 18px!important;\n            margin-bottom: 5px;\n         }\n         .receipt-template .text-lg {\n             font-size: 18px;\n             font-weight: 700;\n         }\n         .receipt-template .info-area td {\n             vertical-align: center;\n         }\n         .receipt-template .info-area td.sinfo {\n             padding: 1px!important;\n         }\n         .receipt-template .info-area td.sinfo span {\n             display: block;\n             font-weight: 700;\n             border: 1px solid #000;\n             padding: 2px;\n         }\n         .receipt-template .listing-area td, .receipt-template .listing-area th, .receipt-template .calculation-area table td {\n             font-size: 13px;\n             font-weight: 700;\n         }\n         .receipt-template .item-list table thead td {\n             text-align: center;\n             padding: 3px;\n             border: 2px solid #000;\n          }\n          .receipt-template .stylish-footer {\n              margin: 10px 0 5px 0;\n          }\n          .receipt-template .stylish-footer span {\n              display: inline-block;\n              font-size: 12px;\n              border-top: 1px dashed #000;\n              border-bottom: 1px dashed #000; \n          }\n', '2019-05-14 19:02:11', '2019-07-02 16:16:59', 1);
 
 -- Volcando estructura para tabla adminsoft.pos_template_to_store
 CREATE TABLE IF NOT EXISTS `pos_template_to_store` (
-  `pt2s` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `ttemplate_id` int NOT NULL,
-  `is_active` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `pt2s` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `ttemplate_id` int(11) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`pt2s`),
   KEY `ttemplate_id` (`ttemplate_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.pos_template_to_store: ~6 rows (aproximadamente)
-INSERT INTO `pos_template_to_store` (`pt2s`, `store_id`, `ttemplate_id`, `is_active`, `status`, `sort_order`) VALUES
+REPLACE INTO `pos_template_to_store` (`pt2s`, `store_id`, `ttemplate_id`, `is_active`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 1, 1),
 	(2, 1, 2, 1, 1, 2),
 	(3, 2, 1, 1, 1, 0),
@@ -3938,35 +3938,35 @@ INSERT INTO `pos_template_to_store` (`pt2s`, `store_id`, `ttemplate_id`, `is_act
 
 -- Volcando estructura para tabla adminsoft.printers
 CREATE TABLE IF NOT EXISTS `printers` (
-  `printer_id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `type` varchar(25) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `profile` varchar(25) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `char_per_line` tinyint unsigned DEFAULT NULL,
+  `printer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(55) NOT NULL,
+  `type` varchar(25) NOT NULL,
+  `profile` varchar(25) DEFAULT NULL,
+  `char_per_line` tinyint(3) unsigned DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`printer_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.printers: ~0 rows (aproximadamente)
-INSERT INTO `printers` (`printer_id`, `title`, `type`, `profile`, `char_per_line`, `created_at`) VALUES
+REPLACE INTO `printers` (`printer_id`, `title`, `type`, `profile`, `char_per_line`, `created_at`) VALUES
 	(1, 'Common Printer', 'network', '', 200, '2018-09-27 13:52:04');
 
 -- Volcando estructura para tabla adminsoft.printer_to_store
 CREATE TABLE IF NOT EXISTS `printer_to_store` (
-  `p2s_id` int NOT NULL AUTO_INCREMENT,
-  `pprinter_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `path` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ip_address` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `port` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `p2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pprinter_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `path` varchar(255) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `port` varchar(10) DEFAULT NULL,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`p2s_id`),
   KEY `pprinter_id` (`pprinter_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.printer_to_store: ~5 rows (aproximadamente)
-INSERT INTO `printer_to_store` (`p2s_id`, `pprinter_id`, `store_id`, `path`, `ip_address`, `port`, `status`, `sort_order`) VALUES
+REPLACE INTO `printer_to_store` (`p2s_id`, `pprinter_id`, `store_id`, `path`, `ip_address`, `port`, `status`, `sort_order`) VALUES
 	(1, 1, 1, '', NULL, '9100', 1, 0),
 	(2, 1, 2, NULL, NULL, NULL, 1, 0),
 	(3, 1, 3, NULL, NULL, NULL, 1, 0),
@@ -3975,22 +3975,22 @@ INSERT INTO `printer_to_store` (`p2s_id`, `pprinter_id`, `store_id`, `path`, `ip
 
 -- Volcando estructura para tabla adminsoft.products
 CREATE TABLE IF NOT EXISTS `products` (
-  `p_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `p_type` enum('standard','service') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'standard',
-  `p_code` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `hsn_code` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `barcode_symbology` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `p_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `category_id` int unsigned NOT NULL DEFAULT '0',
-  `unit_id` int unsigned NOT NULL,
-  `p_image` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `description` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `p_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `p_type` enum('standard','service') NOT NULL DEFAULT 'standard',
+  `p_code` varchar(50) DEFAULT NULL,
+  `hsn_code` varchar(100) DEFAULT NULL,
+  `barcode_symbology` varchar(50) DEFAULT NULL,
+  `p_name` varchar(100) NOT NULL,
+  `category_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `unit_id` int(10) unsigned NOT NULL,
+  `p_image` varchar(250) DEFAULT NULL,
+  `description` longtext DEFAULT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_code` (`p_code`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.products: ~9 rows (aproximadamente)
-INSERT INTO `products` (`p_id`, `p_type`, `p_code`, `hsn_code`, `barcode_symbology`, `p_name`, `category_id`, `unit_id`, `p_image`, `description`) VALUES
+REPLACE INTO `products` (`p_id`, `p_type`, `p_code`, `hsn_code`, `barcode_symbology`, `p_name`, `category_id`, `unit_id`, `p_image`, `description`) VALUES
 	(1, 'standard', '84719278', NULL, 'code128', 'hp core i5 ', 1, 2, '/computadora3-e1537911659471.jpg', '&lt;p&gt;hp core i5&lt;/p&gt;\r\n&lt;p&gt;disco duro 100gb&lt;/p&gt;\r\n&lt;p&gt;memoria ram 8gb&lt;/p&gt;'),
 	(2, 'standard', '93376297', NULL, 'code128', 'INKA KOLA', 6, 2, '/descarga-1.jpg', ''),
 	(3, 'standard', '63168163', NULL, 'code128', 'PALTA', 6, 2, '/palta660x550-1-600x400.jpg', ''),
@@ -4003,44 +4003,44 @@ INSERT INTO `products` (`p_id`, `p_type`, `p_code`, `hsn_code`, `barcode_symbolo
 
 -- Volcando estructura para tabla adminsoft.product_images
 CREATE TABLE IF NOT EXISTS `product_images` (
-  `image_id` int NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
-  `url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `sort_order` int NOT NULL DEFAULT '0',
+  `image_id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`image_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.product_images: ~0 rows (aproximadamente)
-INSERT INTO `product_images` (`image_id`, `product_id`, `url`, `sort_order`) VALUES
+REPLACE INTO `product_images` (`image_id`, `product_id`, `url`, `sort_order`) VALUES
 	(4, 1, '/computadora3-e1537911659471.jpg', 1);
 
 -- Volcando estructura para tabla adminsoft.product_to_store
 CREATE TABLE IF NOT EXISTS `product_to_store` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `purchase_price` float NOT NULL DEFAULT '0',
-  `sell_price` float NOT NULL DEFAULT '0',
-  `quantity_in_stock` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `alert_quantity` decimal(25,4) NOT NULL DEFAULT '10.0000',
-  `sup_id` int unsigned NOT NULL,
-  `brand_id` int DEFAULT NULL,
-  `box_id` int unsigned DEFAULT NULL,
-  `taxrate_id` int unsigned DEFAULT NULL,
-  `tax_method` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'inclusive',
-  `preference` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `purchase_price` float NOT NULL DEFAULT 0,
+  `sell_price` float NOT NULL DEFAULT 0,
+  `quantity_in_stock` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `alert_quantity` decimal(25,4) NOT NULL DEFAULT 10.0000,
+  `sup_id` int(10) unsigned NOT NULL,
+  `brand_id` int(11) DEFAULT NULL,
+  `box_id` int(10) unsigned DEFAULT NULL,
+  `taxrate_id` int(10) unsigned DEFAULT NULL,
+  `tax_method` varchar(55) NOT NULL DEFAULT 'inclusive',
+  `preference` longtext DEFAULT NULL,
   `e_date` date DEFAULT NULL,
   `p_date` date NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `product_id` (`product_id`),
   KEY `p_date` (`p_date`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.product_to_store: ~37 rows (aproximadamente)
-INSERT INTO `product_to_store` (`id`, `product_id`, `store_id`, `purchase_price`, `sell_price`, `quantity_in_stock`, `alert_quantity`, `sup_id`, `brand_id`, `box_id`, `taxrate_id`, `tax_method`, `preference`, `e_date`, `p_date`, `status`, `sort_order`) VALUES
+REPLACE INTO `product_to_store` (`id`, `product_id`, `store_id`, `purchase_price`, `sell_price`, `quantity_in_stock`, `alert_quantity`, `sup_id`, `brand_id`, `box_id`, `taxrate_id`, `tax_method`, `preference`, `e_date`, `p_date`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 2500, 3000, 90.0000, 10.0000, 1, 1, 1, 2, 'inclusive', 'a:0:{}', '2020-12-14', '2019-12-15', 1, 1),
 	(2, 1, 2, 2500, 3000, 50.0000, 10.0000, 1, 1, 1, 2, 'inclusive', 'a:0:{}', '2020-12-14', '2021-01-20', 1, 0),
 	(3, 2, 1, 5, 7.5, 49.0000, 10.0000, 2, 0, 1, 2, 'inclusive', 'a:0:{}', '2022-01-21', '2021-01-21', 1, 0),
@@ -4081,21 +4081,21 @@ INSERT INTO `product_to_store` (`id`, `product_id`, `store_id`, `purchase_price`
 
 -- Volcando estructura para tabla adminsoft.purchase_info
 CREATE TABLE IF NOT EXISTS `purchase_info` (
-  `info_id` int unsigned NOT NULL AUTO_INCREMENT,
+  `info_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `invoice_id` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `inv_type` enum('purchase','transfer') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'purchase',
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `sup_id` int unsigned DEFAULT NULL,
-  `total_item` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `status` enum('stock','active','sold') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'stock',
-  `total_sell` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `purchase_note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `attachment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `is_visible` tinyint unsigned NOT NULL DEFAULT '1',
-  `payment_status` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'due',
-  `checkout_status` tinyint(1) NOT NULL DEFAULT '0',
-  `shipping_status` enum('received','pending','ordered') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'received',
-  `created_by` int NOT NULL,
+  `inv_type` enum('purchase','transfer') NOT NULL DEFAULT 'purchase',
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `sup_id` int(10) unsigned DEFAULT NULL,
+  `total_item` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `status` enum('stock','active','sold') NOT NULL DEFAULT 'stock',
+  `total_sell` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `purchase_note` text DEFAULT NULL,
+  `attachment` text DEFAULT NULL,
+  `is_visible` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `payment_status` varchar(20) NOT NULL DEFAULT 'due',
+  `checkout_status` tinyint(1) NOT NULL DEFAULT 0,
+  `shipping_status` enum('received','pending','ordered') NOT NULL DEFAULT 'received',
+  `created_by` int(11) NOT NULL,
   `purchase_date` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -4105,7 +4105,7 @@ CREATE TABLE IF NOT EXISTS `purchase_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.purchase_info: ~13 rows (aproximadamente)
-INSERT INTO `purchase_info` (`info_id`, `invoice_id`, `inv_type`, `store_id`, `sup_id`, `total_item`, `status`, `total_sell`, `purchase_note`, `attachment`, `is_visible`, `payment_status`, `checkout_status`, `shipping_status`, `created_by`, `purchase_date`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `purchase_info` (`info_id`, `invoice_id`, `inv_type`, `store_id`, `sup_id`, `total_item`, `status`, `total_sell`, `purchase_note`, `attachment`, `is_visible`, `payment_status`, `checkout_status`, `shipping_status`, `created_by`, `purchase_date`, `created_at`, `updated_at`) VALUES
 	(1, 'B2432', 'purchase', 1, 1, 1.0000, 'stock', 0.0000, 'compra de cor i5', '/computadora3-e1537911659471.jpg', 1, 'paid', 1, 'received', 1, '2019-12-15 00:00:00', '2019-12-15 12:18:36', NULL),
 	(2, 'BHp core i5', 'purchase', 2, 1, 1.0000, 'stock', 0.0000, '', '', 1, 'paid', 1, 'received', 1, '2021-01-23 00:00:00', '2021-01-23 20:56:29', NULL),
 	(3, 'B1', 'purchase', 2, 2, 1.0000, 'stock', 0.0000, 'Inka Kola', '', 1, 'paid', 1, 'received', 1, '2021-01-23 00:00:00', '2021-01-23 21:00:11', NULL),
@@ -4122,34 +4122,34 @@ INSERT INTO `purchase_info` (`info_id`, `invoice_id`, `inv_type`, `store_id`, `s
 
 -- Volcando estructura para tabla adminsoft.purchase_item
 CREATE TABLE IF NOT EXISTS `purchase_item` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `invoice_id` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `item_id` int unsigned NOT NULL DEFAULT '0',
-  `category_id` int NOT NULL DEFAULT '0',
-  `brand_id` int DEFAULT NULL,
-  `item_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `item_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `category_id` int(11) NOT NULL DEFAULT 0,
+  `brand_id` int(11) DEFAULT NULL,
+  `item_name` varchar(100) NOT NULL,
   `item_purchase_price` decimal(25,4) NOT NULL,
   `item_selling_price` decimal(25,4) NOT NULL,
   `item_quantity` decimal(25,4) NOT NULL,
-  `total_sell` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `status` enum('stock','active','sold') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'stock',
+  `total_sell` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `status` enum('stock','active','sold') NOT NULL DEFAULT 'stock',
   `item_total` decimal(25,4) NOT NULL,
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `tax_method` enum('exclusive','inclusive') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT 'exclusive',
-  `tax` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gst` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `tax_method` enum('exclusive','inclusive') DEFAULT 'exclusive',
+  `tax` varchar(20) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `return_quantity` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `return_quantity` decimal(25,4) NOT NULL DEFAULT 0.0000,
   PRIMARY KEY (`id`),
   KEY `invoice_id` (`invoice_id`),
   KEY `item_id` (`item_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.purchase_item: ~13 rows (aproximadamente)
-INSERT INTO `purchase_item` (`id`, `invoice_id`, `store_id`, `item_id`, `category_id`, `brand_id`, `item_name`, `item_purchase_price`, `item_selling_price`, `item_quantity`, `total_sell`, `status`, `item_total`, `item_tax`, `tax_method`, `tax`, `gst`, `cgst`, `sgst`, `igst`, `return_quantity`) VALUES
+REPLACE INTO `purchase_item` (`id`, `invoice_id`, `store_id`, `item_id`, `category_id`, `brand_id`, `item_name`, `item_purchase_price`, `item_selling_price`, `item_quantity`, `total_sell`, `status`, `item_total`, `item_tax`, `tax_method`, `tax`, `gst`, `cgst`, `sgst`, `igst`, `return_quantity`) VALUES
 	(1, 'B2432', 1, 1, 1, 1, 'hp core i5 ', 2500.0000, 3000.0000, 100.0000, 10.0000, 'active', 250000.0000, 45000.0000, 'inclusive', '18.0000', '18.0000', 22500.0000, 22500.0000, 0.0000, 0.0000),
 	(2, 'BHp core i5', 2, 1, 1, NULL, 'hp core i5 ', 2500.0000, 3000.0000, 50.0000, 0.0000, 'active', 125000.0000, 0.0000, 'inclusive', '0', '0', 0.0000, 0.0000, 0.0000, 0.0000),
 	(3, 'B1', 2, 2, 6, 0, 'INKA KOLA', 3.0000, 5.0000, 50.0000, 0.0000, 'active', 150.0000, 27.0000, 'inclusive', '18.0000', '18.0000', 0.0000, 0.0000, 27.0000, 0.0000),
@@ -4166,16 +4166,16 @@ INSERT INTO `purchase_item` (`id`, `invoice_id`, `store_id`, `item_id`, `categor
 
 -- Volcando estructura para tabla adminsoft.purchase_logs
 CREATE TABLE IF NOT EXISTS `purchase_logs` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `sup_id` int unsigned NOT NULL,
-  `reference_no` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ref_invoice_id` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `type` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `pmethod_id` int DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `store_id` int unsigned NOT NULL,
-  `created_by` int unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sup_id` int(10) unsigned NOT NULL,
+  `reference_no` varchar(55) DEFAULT NULL,
+  `ref_invoice_id` varchar(55) DEFAULT NULL,
+  `type` varchar(55) NOT NULL,
+  `pmethod_id` int(11) DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `store_id` int(10) unsigned NOT NULL,
+  `created_by` int(10) unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -4185,7 +4185,7 @@ CREATE TABLE IF NOT EXISTS `purchase_logs` (
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.purchase_logs: ~13 rows (aproximadamente)
-INSERT INTO `purchase_logs` (`id`, `sup_id`, `reference_no`, `ref_invoice_id`, `type`, `pmethod_id`, `description`, `amount`, `store_id`, `created_by`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `purchase_logs` (`id`, `sup_id`, `reference_no`, `ref_invoice_id`, `type`, `pmethod_id`, `description`, `amount`, `store_id`, `created_by`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'CT191215100001', 'B2432', 'purchase', 1, 'Paid while purchasing', 250000.0000, 1, 1, '2019-12-15 12:18:36', NULL),
 	(2, 1, 'CT210123200001', 'BHp core i5', 'purchase', 1, 'Paid while purchasing', 147580.0000, 2, 1, '2021-01-23 20:56:29', NULL),
 	(3, 2, 'CT2101232002', 'B1', 'purchase', 1, 'Paid while purchasing', 165.0000, 2, 1, '2021-01-23 21:00:11', NULL),
@@ -4202,28 +4202,28 @@ INSERT INTO `purchase_logs` (`id`, `sup_id`, `reference_no`, `ref_invoice_id`, `
 
 -- Volcando estructura para tabla adminsoft.purchase_payments
 CREATE TABLE IF NOT EXISTS `purchase_payments` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'purchase',
-  `is_hide` tinyint(1) NOT NULL DEFAULT '0',
-  `store_id` int unsigned NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `reference_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `pmethod_id` int unsigned DEFAULT NULL,
-  `transaction_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `attachment` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) NOT NULL DEFAULT 'purchase',
+  `is_hide` tinyint(1) NOT NULL DEFAULT 0,
+  `store_id` int(10) unsigned NOT NULL,
+  `invoice_id` varchar(100) DEFAULT NULL,
+  `reference_no` varchar(100) DEFAULT NULL,
+  `pmethod_id` int(10) unsigned DEFAULT NULL,
+  `transaction_id` varchar(50) DEFAULT NULL,
+  `details` text DEFAULT NULL,
+  `attachment` text DEFAULT NULL,
+  `note` text DEFAULT NULL,
   `amount` decimal(25,4) NOT NULL,
-  `total_paid` decimal(25,4) DEFAULT '0.0000',
-  `balance` decimal(25,4) DEFAULT '0.0000',
-  `created_by` int NOT NULL,
+  `total_paid` decimal(25,4) DEFAULT 0.0000,
+  `balance` decimal(25,4) DEFAULT 0.0000,
+  `created_by` int(11) NOT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `invoice_id` (`invoice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.purchase_payments: ~13 rows (aproximadamente)
-INSERT INTO `purchase_payments` (`id`, `type`, `is_hide`, `store_id`, `invoice_id`, `reference_no`, `pmethod_id`, `transaction_id`, `details`, `attachment`, `note`, `amount`, `total_paid`, `balance`, `created_by`, `created_at`) VALUES
+REPLACE INTO `purchase_payments` (`id`, `type`, `is_hide`, `store_id`, `invoice_id`, `reference_no`, `pmethod_id`, `transaction_id`, `details`, `attachment`, `note`, `amount`, `total_paid`, `balance`, `created_by`, `created_at`) VALUES
 	(1, 'purchase', 0, 1, 'B2432', NULL, 1, NULL, NULL, NULL, 'compra de cor i5', 250000.0000, 250000.0000, 0.0000, 1, '2019-12-15 12:18:36'),
 	(2, 'purchase', 0, 2, 'BHp core i5', NULL, 1, NULL, NULL, NULL, '', 147580.0000, 147580.0000, 0.0000, 1, '2021-01-23 20:56:29'),
 	(3, 'purchase', 0, 2, 'B1', NULL, 1, NULL, NULL, NULL, '', 165.0000, 165.0000, 0.0000, 1, '2021-01-23 21:00:11'),
@@ -4240,32 +4240,32 @@ INSERT INTO `purchase_payments` (`id`, `type`, `is_hide`, `store_id`, `invoice_i
 
 -- Volcando estructura para tabla adminsoft.purchase_price
 CREATE TABLE IF NOT EXISTS `purchase_price` (
-  `price_id` int NOT NULL AUTO_INCREMENT,
+  `price_id` int(11) NOT NULL AUTO_INCREMENT,
   `invoice_id` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
   `subtotal` decimal(25,4) DEFAULT NULL,
-  `discount_type` enum('percentage','plain') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `discount_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `shipping_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `shipping_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `others_charge` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `order_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `discount_type` enum('percentage','plain') NOT NULL DEFAULT 'plain',
+  `discount_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `shipping_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `shipping_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `others_charge` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `order_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `payable_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `paid_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `due_paid` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `due` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `return_amount` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `balance` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `payable_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `paid_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `due_paid` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `due` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `return_amount` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `balance` decimal(25,4) NOT NULL DEFAULT 0.0000,
   PRIMARY KEY (`price_id`),
   KEY `invoice_id` (`invoice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.purchase_price: ~13 rows (aproximadamente)
-INSERT INTO `purchase_price` (`price_id`, `invoice_id`, `store_id`, `subtotal`, `discount_type`, `discount_amount`, `shipping_type`, `shipping_amount`, `others_charge`, `item_tax`, `order_tax`, `cgst`, `sgst`, `igst`, `payable_amount`, `paid_amount`, `due_paid`, `due`, `return_amount`, `balance`) VALUES
+REPLACE INTO `purchase_price` (`price_id`, `invoice_id`, `store_id`, `subtotal`, `discount_type`, `discount_amount`, `shipping_type`, `shipping_amount`, `others_charge`, `item_tax`, `order_tax`, `cgst`, `sgst`, `igst`, `payable_amount`, `paid_amount`, `due_paid`, `due`, `return_amount`, `balance`) VALUES
 	(1, 'B2432', 1, 250000.0000, 'plain', 0.0000, 'plain', 0.0000, 0.0000, 45000.0000, 0.0000, 22500.0000, 22500.0000, 0.0000, 250000.0000, 250000.0000, 0.0000, 0.0000, 0.0000, 0.0000),
 	(2, 'BHp core i5', 2, 125000.0000, 'plain', 0.0000, 'plain', 50.0000, 30.0000, 0.0000, 22500.0000, 0.0000, 0.0000, 22500.0000, 147580.0000, 147580.0000, 0.0000, 0.0000, 0.0000, 0.0000),
 	(3, 'B1', 2, 150.0000, 'plain', 0.0000, 'plain', 10.0000, 5.0000, 27.0000, 0.0000, 0.0000, 0.0000, 27.0000, 165.0000, 165.0000, 0.0000, 0.0000, 0.0000, 0.0000),
@@ -4282,22 +4282,22 @@ INSERT INTO `purchase_price` (`price_id`, `invoice_id`, `store_id`, `subtotal`, 
 
 -- Volcando estructura para tabla adminsoft.purchase_returns
 CREATE TABLE IF NOT EXISTS `purchase_returns` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `reference_no` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `sup_id` int NOT NULL,
-  `note` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `total_item` int DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `reference_no` varchar(55) NOT NULL,
+  `invoice_id` varchar(100) NOT NULL,
+  `sup_id` int(11) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `total_item` int(11) DEFAULT NULL,
   `total_quantity` decimal(25,4) NOT NULL,
-  `subtotal` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `subtotal` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `total_amount` decimal(25,4) NOT NULL,
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `attachment` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `created_by` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -4309,14 +4309,14 @@ CREATE TABLE IF NOT EXISTS `purchase_returns` (
 
 -- Volcando estructura para tabla adminsoft.purchase_return_items
 CREATE TABLE IF NOT EXISTS `purchase_return_items` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `item_id` int NOT NULL,
-  `item_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `invoice_id` varchar(100) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `item_name` varchar(255) NOT NULL,
   `item_quantity` decimal(15,4) NOT NULL,
   `item_price` decimal(25,4) NOT NULL,
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
@@ -4331,21 +4331,21 @@ CREATE TABLE IF NOT EXISTS `purchase_return_items` (
 
 -- Volcando estructura para tabla adminsoft.quotation_info
 CREATE TABLE IF NOT EXISTS `quotation_info` (
-  `info_id` int NOT NULL AUTO_INCREMENT,
-  `reference_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `customer_id` int unsigned NOT NULL DEFAULT '0',
-  `customer_mobile` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` enum('sent','pending','complete','canceled') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'sent',
-  `payment_status` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `quotation_note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `is_installment` tinyint(1) NOT NULL DEFAULT '0',
-  `is_order` tinyint(1) NOT NULL DEFAULT '0',
-  `total_items` int NOT NULL DEFAULT '0',
-  `address` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `pmethod_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `created_by` int unsigned NOT NULL DEFAULT '0',
+  `info_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference_no` varchar(100) DEFAULT NULL,
+  `invoice_id` varchar(100) DEFAULT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `customer_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `customer_mobile` varchar(20) DEFAULT NULL,
+  `status` enum('sent','pending','complete','canceled') NOT NULL DEFAULT 'sent',
+  `payment_status` varchar(50) DEFAULT NULL,
+  `quotation_note` text DEFAULT NULL,
+  `is_installment` tinyint(1) NOT NULL DEFAULT 0,
+  `is_order` tinyint(1) NOT NULL DEFAULT 0,
+  `total_items` int(11) NOT NULL DEFAULT 0,
+  `address` text DEFAULT NULL,
+  `pmethod_details` text DEFAULT NULL,
+  `created_by` int(10) unsigned NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`info_id`)
@@ -4355,28 +4355,28 @@ CREATE TABLE IF NOT EXISTS `quotation_info` (
 
 -- Volcando estructura para tabla adminsoft.quotation_item
 CREATE TABLE IF NOT EXISTS `quotation_item` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `reference_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `sup_id` int unsigned NOT NULL,
-  `category_id` int unsigned NOT NULL,
-  `brand_id` int DEFAULT NULL,
-  `item_id` int unsigned NOT NULL,
-  `item_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference_no` varchar(100) NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `sup_id` int(10) unsigned NOT NULL,
+  `category_id` int(10) unsigned NOT NULL,
+  `brand_id` int(11) DEFAULT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `item_name` varchar(100) NOT NULL,
   `item_price` decimal(25,4) NOT NULL,
-  `item_discount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `tax_method` enum('exclusive','inclusive') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'exclusive',
-  `taxrate_id` int unsigned DEFAULT NULL,
-  `tax` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gst` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `item_discount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `tax_method` enum('exclusive','inclusive') NOT NULL DEFAULT 'exclusive',
+  `taxrate_id` int(10) unsigned DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
   `item_quantity` decimal(25,4) NOT NULL,
   `item_purchase_price` decimal(25,4) DEFAULT NULL,
   `item_total` decimal(25,4) NOT NULL,
-  `purchase_invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `purchase_invoice_id` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `reference_no` (`reference_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -4385,23 +4385,23 @@ CREATE TABLE IF NOT EXISTS `quotation_item` (
 
 -- Volcando estructura para tabla adminsoft.quotation_price
 CREATE TABLE IF NOT EXISTS `quotation_price` (
-  `price_id` int NOT NULL AUTO_INCREMENT,
-  `reference_no` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
+  `price_id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference_no` varchar(100) NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
   `subtotal` decimal(25,4) DEFAULT NULL,
-  `discount_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `discount_amount` decimal(25,4) DEFAULT '0.0000',
-  `interest_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `interest_percentage` int NOT NULL DEFAULT '0',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `order_tax` decimal(25,4) DEFAULT '0.0000',
+  `discount_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `discount_amount` decimal(25,4) DEFAULT 0.0000,
+  `interest_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `interest_percentage` int(11) NOT NULL DEFAULT 0,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `order_tax` decimal(25,4) DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `total_purchase_price` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `shipping_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `shipping_amount` decimal(25,4) DEFAULT '0.0000',
-  `others_charge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `total_purchase_price` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `shipping_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `shipping_amount` decimal(25,4) DEFAULT 0.0000,
+  `others_charge` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `payable_amount` decimal(25,4) DEFAULT NULL,
   PRIMARY KEY (`price_id`),
   KEY `reference_no` (`reference_no`)
@@ -4411,24 +4411,24 @@ CREATE TABLE IF NOT EXISTS `quotation_price` (
 
 -- Volcando estructura para tabla adminsoft.returns
 CREATE TABLE IF NOT EXISTS `returns` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `reference_no` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `customer_id` int NOT NULL,
-  `note` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `reference_no` varchar(55) NOT NULL,
+  `invoice_id` varchar(100) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
   `total_item` decimal(25,4) DEFAULT NULL,
   `total_quantity` decimal(25,4) NOT NULL,
-  `subtotal` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `subtotal` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `total_amount` decimal(25,4) NOT NULL,
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `total_purchase_price` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `profit` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `attachment` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `created_by` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `total_purchase_price` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `profit` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `attachment` varchar(55) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -4439,15 +4439,15 @@ CREATE TABLE IF NOT EXISTS `returns` (
 
 -- Volcando estructura para tabla adminsoft.return_items
 CREATE TABLE IF NOT EXISTS `return_items` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `item_id` int NOT NULL,
-  `item_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) NOT NULL,
+  `invoice_id` varchar(100) NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `item_name` varchar(255) NOT NULL,
   `item_quantity` decimal(25,4) NOT NULL,
   `item_purchase_price` decimal(25,4) DEFAULT NULL,
   `item_price` decimal(25,4) NOT NULL,
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
@@ -4462,23 +4462,23 @@ CREATE TABLE IF NOT EXISTS `return_items` (
 
 -- Volcando estructura para tabla adminsoft.selling_info
 CREATE TABLE IF NOT EXISTS `selling_info` (
-  `info_id` int NOT NULL AUTO_INCREMENT,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `edit_counter` int unsigned NOT NULL DEFAULT '0',
-  `inv_type` enum('sell') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'sell',
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `customer_id` int unsigned NOT NULL DEFAULT '0',
-  `customer_mobile` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ref_invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ref_user_id` int unsigned NOT NULL DEFAULT '0',
-  `invoice_note` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `total_items` smallint DEFAULT NULL,
-  `is_installment` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
-  `pmethod_id` int DEFAULT NULL,
-  `payment_status` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `checkout_status` tinyint(1) NOT NULL DEFAULT '0',
-  `created_by` int unsigned NOT NULL DEFAULT '0',
+  `info_id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` varchar(100) NOT NULL,
+  `edit_counter` int(10) unsigned NOT NULL DEFAULT 0,
+  `inv_type` enum('sell') NOT NULL DEFAULT 'sell',
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `customer_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `customer_mobile` varchar(20) DEFAULT NULL,
+  `ref_invoice_id` varchar(100) DEFAULT NULL,
+  `ref_user_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `invoice_note` text DEFAULT NULL,
+  `total_items` smallint(6) DEFAULT NULL,
+  `is_installment` tinyint(1) NOT NULL DEFAULT 0,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `pmethod_id` int(11) DEFAULT NULL,
+  `payment_status` varchar(20) DEFAULT NULL,
+  `checkout_status` tinyint(1) NOT NULL DEFAULT 0,
+  `created_by` int(10) unsigned NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`info_id`),
@@ -4487,7 +4487,7 @@ CREATE TABLE IF NOT EXISTS `selling_info` (
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.selling_info: ~28 rows (aproximadamente)
-INSERT INTO `selling_info` (`info_id`, `invoice_id`, `edit_counter`, `inv_type`, `store_id`, `customer_id`, `customer_mobile`, `ref_invoice_id`, `ref_user_id`, `invoice_note`, `total_items`, `is_installment`, `status`, `pmethod_id`, `payment_status`, `checkout_status`, `created_by`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `selling_info` (`info_id`, `invoice_id`, `edit_counter`, `inv_type`, `store_id`, `customer_id`, `customer_mobile`, `ref_invoice_id`, `ref_user_id`, `invoice_note`, `total_items`, `is_installment`, `status`, `pmethod_id`, `payment_status`, `checkout_status`, `created_by`, `created_at`, `updated_at`) VALUES
 	(1, '100000001', 0, 'sell', 1, 1, '0170000000000', NULL, 0, '', 1, 0, 1, 1, 'paid', 1, 1, '2019-12-15 12:19:46', NULL),
 	(2, '100000002', 0, 'sell', 1, 1, '0170000000000', NULL, 0, '', 1, 0, 1, 2, 'paid', 1, 1, '2021-01-20 19:49:33', NULL),
 	(3, '100000003', 0, 'sell', 1, 1, '0170000000000', NULL, 0, '', 1, 0, 1, 1, 'paid', 1, 1, '2021-01-20 19:50:10', NULL),
@@ -4519,32 +4519,32 @@ INSERT INTO `selling_info` (`info_id`, `invoice_id`, `edit_counter`, `inv_type`,
 
 -- Volcando estructura para tabla adminsoft.selling_item
 CREATE TABLE IF NOT EXISTS `selling_item` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `category_id` int unsigned NOT NULL,
-  `brand_id` int DEFAULT NULL,
-  `sup_id` int unsigned NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
-  `item_id` int unsigned NOT NULL,
-  `item_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` varchar(100) NOT NULL,
+  `category_id` int(10) unsigned NOT NULL,
+  `brand_id` int(11) DEFAULT NULL,
+  `sup_id` int(10) unsigned NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
+  `item_id` int(10) unsigned NOT NULL,
+  `item_name` varchar(100) NOT NULL,
   `item_price` decimal(25,4) NOT NULL,
-  `item_discount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `tax_method` enum('inclusive','exclusive') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT 'exclusive',
-  `taxrate_id` int unsigned DEFAULT NULL,
-  `tax` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gst` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `item_discount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `tax_method` enum('inclusive','exclusive') DEFAULT 'exclusive',
+  `taxrate_id` int(10) unsigned DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
   `item_quantity` decimal(25,4) NOT NULL,
   `item_purchase_price` decimal(25,4) DEFAULT NULL,
   `item_total` decimal(25,4) NOT NULL,
-  `purchase_invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `print_counter` int unsigned DEFAULT '0',
+  `purchase_invoice_id` varchar(100) DEFAULT NULL,
+  `print_counter` int(10) unsigned DEFAULT 0,
   `print_counter_time` datetime DEFAULT NULL,
-  `printed_by` int DEFAULT NULL,
-  `return_quantity` decimal(25,4) DEFAULT '0.0000',
+  `printed_by` int(11) DEFAULT NULL,
+  `return_quantity` decimal(25,4) DEFAULT 0.0000,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `invoice_id` (`invoice_id`),
@@ -4552,7 +4552,7 @@ CREATE TABLE IF NOT EXISTS `selling_item` (
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.selling_item: ~45 rows (aproximadamente)
-INSERT INTO `selling_item` (`id`, `invoice_id`, `category_id`, `brand_id`, `sup_id`, `store_id`, `item_id`, `item_name`, `item_price`, `item_discount`, `item_tax`, `tax_method`, `taxrate_id`, `tax`, `gst`, `cgst`, `sgst`, `igst`, `item_quantity`, `item_purchase_price`, `item_total`, `purchase_invoice_id`, `print_counter`, `print_counter_time`, `printed_by`, `return_quantity`, `created_at`) VALUES
+REPLACE INTO `selling_item` (`id`, `invoice_id`, `category_id`, `brand_id`, `sup_id`, `store_id`, `item_id`, `item_name`, `item_price`, `item_discount`, `item_tax`, `tax_method`, `taxrate_id`, `tax`, `gst`, `cgst`, `sgst`, `igst`, `item_quantity`, `item_purchase_price`, `item_total`, `purchase_invoice_id`, `print_counter`, `print_counter_time`, `printed_by`, `return_quantity`, `created_at`) VALUES
 	(1, '100000001', 1, 1, 1, 1, 1, 'hp core i5 ', 3000.0000, 0.0000, 540.0000, 'inclusive', 2, '18.0000', '18.0000', 0.0000, 0.0000, 540.0000, 1.0000, 2500.0000, 3000.0000, 'B2432', 0, NULL, NULL, 0.0000, NULL),
 	(2, '100000002', 1, 1, 1, 1, 1, 'hp core i5 ', 3000.0000, 0.0000, 1620.0000, 'inclusive', 2, '18.0000', '18.0000', 0.0000, 0.0000, 1620.0000, 3.0000, 7500.0000, 9000.0000, 'B2432', 0, NULL, NULL, 0.0000, NULL),
 	(3, '100000003', 1, 1, 1, 1, 1, 'hp core i5 ', 3000.0000, 0.0000, 1080.0000, 'inclusive', 2, '18.0000', '18.0000', 0.0000, 0.0000, 1080.0000, 2.0000, 5000.0000, 6000.0000, 'B2432', 0, NULL, NULL, 0.0000, NULL),
@@ -4601,38 +4601,38 @@ INSERT INTO `selling_item` (`id`, `invoice_id`, `category_id`, `brand_id`, `sup_
 
 -- Volcando estructura para tabla adminsoft.selling_price
 CREATE TABLE IF NOT EXISTS `selling_price` (
-  `price_id` int NOT NULL AUTO_INCREMENT,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `store_id` int unsigned NOT NULL DEFAULT '1',
+  `price_id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` varchar(100) NOT NULL,
+  `store_id` int(10) unsigned NOT NULL DEFAULT 1,
   `subtotal` decimal(25,4) DEFAULT NULL,
-  `discount_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `discount_amount` decimal(25,4) DEFAULT '0.0000',
-  `interest_amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `interest_percentage` int NOT NULL DEFAULT '0',
-  `item_tax` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `order_tax` decimal(25,4) DEFAULT '0.0000',
+  `discount_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `discount_amount` decimal(25,4) DEFAULT 0.0000,
+  `interest_amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `interest_percentage` int(11) NOT NULL DEFAULT 0,
+  `item_tax` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `order_tax` decimal(25,4) DEFAULT 0.0000,
   `cgst` decimal(25,4) DEFAULT NULL,
   `sgst` decimal(25,4) DEFAULT NULL,
   `igst` decimal(25,4) DEFAULT NULL,
-  `total_purchase_price` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `shipping_type` enum('plain','percentage') CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'plain',
-  `shipping_amount` decimal(25,4) DEFAULT '0.0000',
-  `others_charge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `total_purchase_price` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `shipping_type` enum('plain','percentage') NOT NULL DEFAULT 'plain',
+  `shipping_amount` decimal(25,4) DEFAULT 0.0000,
+  `others_charge` decimal(25,4) NOT NULL DEFAULT 0.0000,
   `payable_amount` decimal(25,4) DEFAULT NULL,
   `paid_amount` decimal(25,4) NOT NULL,
-  `due` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `due_paid` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `return_amount` decimal(25,4) unsigned NOT NULL DEFAULT '0.0000',
-  `balance` decimal(25,4) DEFAULT '0.0000',
-  `profit` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `previous_due` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `prev_due_paid` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `due` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `due_paid` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `return_amount` decimal(25,4) unsigned NOT NULL DEFAULT 0.0000,
+  `balance` decimal(25,4) DEFAULT 0.0000,
+  `profit` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `previous_due` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `prev_due_paid` decimal(25,4) NOT NULL DEFAULT 0.0000,
   PRIMARY KEY (`price_id`),
   KEY `invoice_id` (`invoice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.selling_price: ~28 rows (aproximadamente)
-INSERT INTO `selling_price` (`price_id`, `invoice_id`, `store_id`, `subtotal`, `discount_type`, `discount_amount`, `interest_amount`, `interest_percentage`, `item_tax`, `order_tax`, `cgst`, `sgst`, `igst`, `total_purchase_price`, `shipping_type`, `shipping_amount`, `others_charge`, `payable_amount`, `paid_amount`, `due`, `due_paid`, `return_amount`, `balance`, `profit`, `previous_due`, `prev_due_paid`) VALUES
+REPLACE INTO `selling_price` (`price_id`, `invoice_id`, `store_id`, `subtotal`, `discount_type`, `discount_amount`, `interest_amount`, `interest_percentage`, `item_tax`, `order_tax`, `cgst`, `sgst`, `igst`, `total_purchase_price`, `shipping_type`, `shipping_amount`, `others_charge`, `payable_amount`, `paid_amount`, `due`, `due_paid`, `return_amount`, `balance`, `profit`, `previous_due`, `prev_due_paid`) VALUES
 	(1, '100000001', 1, 3000.0000, 'plain', 0.0000, 0.0000, 0, 540.0000, 0.0000, 0.0000, 0.0000, 540.0000, 2500.0000, 'plain', 0.0000, 0.0000, 3000.0000, 3000.0000, 0.0000, 0.0000, 0.0000, 1000.0000, 500.0000, 0.0000, 0.0000),
 	(2, '100000002', 1, 9000.0000, 'plain', 0.0000, 0.0000, 0, 1620.0000, 0.0000, 0.0000, 0.0000, 1620.0000, 7500.0000, 'plain', 0.0000, 0.0000, 9000.0000, 9000.0000, 0.0000, 0.0000, 0.0000, 1000.0000, 1500.0000, 0.0000, 0.0000),
 	(3, '100000003', 1, 6000.0000, 'plain', 0.0000, 0.0000, 0, 1080.0000, 0.0000, 0.0000, 0.0000, 1080.0000, 5000.0000, 'plain', 0.0000, 0.0000, 6000.0000, 6000.0000, 0.0000, 0.0000, 0.0000, 0.0000, 1000.0000, 0.0000, 0.0000),
@@ -4664,23 +4664,23 @@ INSERT INTO `selling_price` (`price_id`, `invoice_id`, `store_id`, `subtotal`, `
 
 -- Volcando estructura para tabla adminsoft.sell_logs
 CREATE TABLE IF NOT EXISTS `sell_logs` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `customer_id` int unsigned NOT NULL,
-  `reference_no` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `ref_invoice_id` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `type` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `pmethod_id` int DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `amount` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `store_id` int unsigned NOT NULL,
-  `created_by` int unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `customer_id` int(10) unsigned NOT NULL,
+  `reference_no` varchar(55) DEFAULT NULL,
+  `ref_invoice_id` varchar(55) DEFAULT NULL,
+  `type` varchar(55) NOT NULL,
+  `pmethod_id` int(11) DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `amount` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `store_id` int(10) unsigned NOT NULL,
+  `created_by` int(10) unsigned NOT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.sell_logs: ~29 rows (aproximadamente)
-INSERT INTO `sell_logs` (`id`, `customer_id`, `reference_no`, `ref_invoice_id`, `type`, `pmethod_id`, `description`, `amount`, `store_id`, `created_by`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `sell_logs` (`id`, `customer_id`, `reference_no`, `ref_invoice_id`, `type`, `pmethod_id`, `description`, `amount`, `store_id`, `created_by`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'CT191215100001', '100000001', 'sell', 1, 'Paid while selling', 3000.0000, 1, 1, '2019-12-15 12:19:46', NULL),
 	(2, 1, 'CT2101201002', '100000002', 'sell', 2, 'Paid while selling', 9000.0000, 1, 1, '2021-01-20 19:49:33', NULL),
 	(3, 1, 'CT21012011003', '100000003', 'sell', 1, 'Paid while selling', 6000.0000, 1, 1, '2021-01-20 19:50:10', NULL),
@@ -4713,39 +4713,39 @@ INSERT INTO `sell_logs` (`id`, `customer_id`, `reference_no`, `ref_invoice_id`, 
 
 -- Volcando estructura para tabla adminsoft.settings
 CREATE TABLE IF NOT EXISTS `settings` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `version` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `is_update_available` tinyint(1) NOT NULL DEFAULT '0',
-  `update_version` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `update_link` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `version` varchar(10) NOT NULL,
+  `is_update_available` tinyint(1) NOT NULL DEFAULT 0,
+  `update_version` varchar(100) DEFAULT NULL,
+  `update_link` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.settings: ~0 rows (aproximadamente)
-INSERT INTO `settings` (`id`, `version`, `is_update_available`, `update_version`, `update_link`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `settings` (`id`, `version`, `is_update_available`, `update_version`, `update_link`, `created_at`, `updated_at`) VALUES
 	(1, '3.0', 0, '', '', '2018-09-14 18:00:00', '2019-06-12 15:34:18');
 
 -- Volcando estructura para tabla adminsoft.shortcut_links
 CREATE TABLE IF NOT EXISTS `shortcut_links` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `href` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `target` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT '_self',
-  `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `icon` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `thumbnail` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `permission_slug` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `href` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `target` varchar(100) NOT NULL DEFAULT '_self',
+  `title` varchar(255) NOT NULL,
+  `icon` varchar(50) NOT NULL,
+  `thumbnail` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `permission_slug` varchar(50) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.shortcut_links: ~19 rows (aproximadamente)
-INSERT INTO `shortcut_links` (`id`, `type`, `href`, `target`, `title`, `icon`, `thumbnail`, `permission_slug`, `status`, `sort_order`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `shortcut_links` (`id`, `type`, `href`, `target`, `title`, `icon`, `thumbnail`, `permission_slug`, `status`, `sort_order`, `created_at`, `updated_at`) VALUES
 	(1, 'report', '/admin/report_overview.php', '', 'Overview Report', 'fa-angle-right', '', 'read_overview_report', 1, 1, '2019-02-03 12:00:00', '2019-07-01 03:59:30'),
 	(2, 'report', '/admin/report_collection.php', '', 'Collection Report', 'fa-angle-right', '', 'read_collection_report', 1, 2, '2019-02-03 12:00:00', '2019-07-01 03:59:30'),
 	(3, 'report', '/admin/report_customer_due_collection.php', '', 'Due Collection Report', 'fa-angle-right', '', 'read_customer_due_collection_report', 1, 3, '2019-02-03 12:00:00', '2019-07-01 03:59:30'),
@@ -4768,20 +4768,20 @@ INSERT INTO `shortcut_links` (`id`, `type`, `href`, `target`, `title`, `icon`, `
 
 -- Volcando estructura para tabla adminsoft.sms_schedule
 CREATE TABLE IF NOT EXISTS `sms_schedule` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `schedule_datetime` datetime DEFAULT NULL,
-  `store_id` int unsigned NOT NULL,
-  `people_type` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `people_sms_type` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `mobile_number` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `people_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `sms_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
-  `sms_type` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'TEXT',
-  `campaign_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `process_status` tinyint unsigned NOT NULL DEFAULT '0',
-  `total_try` int NOT NULL DEFAULT '0',
-  `response_text` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `delivery_status` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'pending',
+  `store_id` int(10) unsigned NOT NULL,
+  `people_type` varchar(100) DEFAULT NULL,
+  `people_sms_type` varchar(50) DEFAULT NULL,
+  `mobile_number` varchar(20) NOT NULL,
+  `people_name` varchar(100) NOT NULL,
+  `sms_text` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `sms_type` varchar(50) NOT NULL DEFAULT 'TEXT',
+  `campaign_name` varchar(100) DEFAULT NULL,
+  `process_status` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `total_try` int(11) NOT NULL DEFAULT 0,
+  `response_text` varchar(250) DEFAULT NULL,
+  `delivery_status` varchar(50) NOT NULL DEFAULT 'pending',
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `store_id` (`store_id`),
@@ -4792,28 +4792,28 @@ CREATE TABLE IF NOT EXISTS `sms_schedule` (
 
 -- Volcando estructura para tabla adminsoft.sms_setting
 CREATE TABLE IF NOT EXISTS `sms_setting` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `type` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `api_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `auth_key` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sender_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `contact` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `username` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `password` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `maskname` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `campaignname` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `unicode` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `country_code` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `url` varchar(150) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` tinyint(1) DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(50) NOT NULL,
+  `api_id` varchar(100) DEFAULT NULL,
+  `auth_key` varchar(100) DEFAULT NULL,
+  `sender_id` varchar(100) NOT NULL,
+  `contact` text DEFAULT NULL,
+  `username` varchar(150) DEFAULT NULL,
+  `password` varchar(150) DEFAULT NULL,
+  `maskname` varchar(100) DEFAULT NULL,
+  `campaignname` varchar(100) DEFAULT NULL,
+  `unicode` varchar(20) DEFAULT NULL,
+  `country_code` varchar(20) DEFAULT NULL,
+  `url` varchar(150) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.sms_setting: ~5 rows (aproximadamente)
-INSERT INTO `sms_setting` (`id`, `type`, `api_id`, `auth_key`, `sender_id`, `contact`, `username`, `password`, `maskname`, `campaignname`, `unicode`, `country_code`, `url`, `status`, `sort_order`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `sms_setting` (`id`, `type`, `api_id`, `auth_key`, `sender_id`, `contact`, `username`, `password`, `maskname`, `campaignname`, `unicode`, `country_code`, `url`, `status`, `sort_order`, `created_at`, `updated_at`) VALUES
 	(1, 'Clickatell', NULL, '', '', '', NULL, NULL, '', '', '', '', '', 1, 0, '0000-00-00 00:00:00', '2019-07-02 16:23:32'),
 	(2, 'Twilio', '', '', '', '', '', '', '', '', '', '', '', 1, 0, '0000-00-00 00:00:00', '2019-07-02 16:23:16'),
 	(3, 'Msg91', '', '', '', '', '', '', '', '', '', '', 'http://api.msg91.com/api/v2/', 1, 0, '0000-00-00 00:00:00', '2019-07-02 16:23:17'),
@@ -4822,41 +4822,41 @@ INSERT INTO `sms_setting` (`id`, `type`, `api_id`, `auth_key`, `sender_id`, `con
 
 -- Volcando estructura para tabla adminsoft.stores
 CREATE TABLE IF NOT EXISTS `stores` (
-  `store_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code_name` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `mobile` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `country` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `zip_code` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `currency` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'USD',
-  `vat_reg_no` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `cashier_id` int unsigned NOT NULL,
-  `address` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `receipt_printer` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `cash_drawer_codes` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `char_per_line` tinyint NOT NULL DEFAULT '42',
-  `remote_printing` tinyint(1) NOT NULL DEFAULT '1',
-  `printer` int DEFAULT NULL,
-  `order_printers` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `auto_print` tinyint(1) NOT NULL DEFAULT '0',
+  `store_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `code_name` varchar(55) DEFAULT NULL,
+  `mobile` varchar(14) NOT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `country` varchar(50) NOT NULL,
+  `zip_code` varchar(50) NOT NULL,
+  `currency` varchar(100) NOT NULL DEFAULT 'USD',
+  `vat_reg_no` varchar(250) DEFAULT NULL,
+  `cashier_id` int(10) unsigned NOT NULL,
+  `address` longtext DEFAULT NULL,
+  `receipt_printer` varchar(100) DEFAULT NULL,
+  `cash_drawer_codes` varchar(100) DEFAULT NULL,
+  `char_per_line` tinyint(4) NOT NULL DEFAULT 42,
+  `remote_printing` tinyint(1) NOT NULL DEFAULT 1,
+  `printer` int(11) DEFAULT NULL,
+  `order_printers` varchar(100) DEFAULT NULL,
+  `auto_print` tinyint(1) NOT NULL DEFAULT 0,
   `local_printers` tinyint(1) DEFAULT NULL,
-  `logo` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `favicon` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `preference` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `sound_effect` tinyint unsigned NOT NULL DEFAULT '1',
-  `sort_order` int unsigned NOT NULL DEFAULT '0',
-  `feedback_status` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'ready',
+  `logo` text DEFAULT NULL,
+  `favicon` varchar(250) DEFAULT NULL,
+  `preference` longtext DEFAULT NULL,
+  `sound_effect` tinyint(3) unsigned NOT NULL DEFAULT 1,
+  `sort_order` int(10) unsigned NOT NULL DEFAULT 0,
+  `feedback_status` varchar(100) NOT NULL DEFAULT 'ready',
   `feedback_at` datetime DEFAULT NULL,
-  `deposit_account_id` int DEFAULT NULL,
-  `thumbnail` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `deposit_account_id` int(11) DEFAULT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT 1,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`store_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.stores: ~5 rows (aproximadamente)
-INSERT INTO `stores` (`store_id`, `name`, `code_name`, `mobile`, `email`, `country`, `zip_code`, `currency`, `vat_reg_no`, `cashier_id`, `address`, `receipt_printer`, `cash_drawer_codes`, `char_per_line`, `remote_printing`, `printer`, `order_printers`, `auto_print`, `local_printers`, `logo`, `favicon`, `preference`, `sound_effect`, `sort_order`, `feedback_status`, `feedback_at`, `deposit_account_id`, `thumbnail`, `status`, `created_at`) VALUES
+REPLACE INTO `stores` (`store_id`, `name`, `code_name`, `mobile`, `email`, `country`, `zip_code`, `currency`, `vat_reg_no`, `cashier_id`, `address`, `receipt_printer`, `cash_drawer_codes`, `char_per_line`, `remote_printing`, `printer`, `order_printers`, `auto_print`, `local_printers`, `logo`, `favicon`, `preference`, `sound_effect`, `sort_order`, `feedback_status`, `feedback_at`, `deposit_account_id`, `thumbnail`, `status`, `created_at`) VALUES
 	(1, 'MI TIENDAWEB', 'GrupoAlegre', '231321', 'yheder.12@gmail.com', 'PE', '051', 'PEN', '', 4, 'Av. Micaela cuadra 1084- 1088', '1', NULL, 42, 0, 1, '["1"]', 0, 1, '1_logo.png', '1_favicon.png', 'a:32:{s:10:"gst_reg_no";s:0:"";s:8:"timezone";s:12:"America/Lima";s:21:"invoice_edit_lifespan";s:4:"1440";s:26:"invoice_edit_lifespan_unit";s:6:"minute";s:23:"invoice_delete_lifespan";s:4:"1440";s:28:"invoice_delete_lifespan_unit";s:6:"minute";s:3:"tax";s:1:"0";s:11:"sms_gateway";s:10:"Clickatell";s:9:"sms_alert";s:1:"0";s:24:"expiring_soon_alert_days";s:0:"";s:20:"datatable_item_limit";s:2:"25";s:16:"reference_format";s:13:"year_sequence";s:22:"sales_reference_prefix";s:0:"";s:16:"receipt_template";s:1:"1";s:12:"invoice_view";s:8:"standard";s:14:"business_state";s:2:"AN";s:31:"change_item_price_while_billing";s:1:"0";s:25:"pos_product_display_limit";s:3:"100";s:15:"after_sell_page";s:3:"pos";s:19:"invoice_footer_text";s:26:"Thank you for choosing us!";s:10:"email_from";s:13:"tusolutionweb";s:13:"email_address";s:2:"US";s:12:"email_driver";s:11:"smtp_server";s:14:"send_mail_path";s:18:"/usr/sbin/sendmail";s:9:"smtp_host";s:15:"smtp.google.com";s:13:"smtp_username";s:0:"";s:13:"smtp_password";s:0:"";s:9:"smtp_port";s:3:"465";s:7:"ssl_tls";s:3:"ssl";s:12:"ftp_hostname";s:0:"";s:12:"ftp_username";s:0:"";s:12:"ftp_password";s:0:"";}', 1, 0, 'ready', '2019-03-01 14:29:18', 1, NULL, 1, '2018-09-24 18:00:00'),
 	(2, 'Berisso', '51', '931240141', 'yheder.12@gmail.com', 'PE', '051', 'USD', '', 2, 'Av. Arenales, cuadra 10 con Mariátegui Nro 1', '1', NULL, 42, 0, NULL, NULL, 0, NULL, NULL, NULL, 'a:32:{s:10:"gst_reg_no";s:0:"";s:8:"timezone";s:12:"America/Lima";s:21:"invoice_edit_lifespan";s:4:"1440";s:26:"invoice_edit_lifespan_unit";s:6:"minute";s:23:"invoice_delete_lifespan";s:4:"1440";s:28:"invoice_delete_lifespan_unit";s:6:"minute";s:3:"tax";s:2:"18";s:11:"sms_gateway";s:10:"Clickatell";s:9:"sms_alert";s:1:"0";s:24:"expiring_soon_alert_days";s:0:"";s:20:"datatable_item_limit";s:2:"25";s:16:"reference_format";s:13:"year_sequence";s:22:"sales_reference_prefix";s:0:"";s:16:"receipt_template";s:1:"1";s:12:"invoice_view";s:8:"standard";s:14:"business_state";s:2:"AN";s:31:"change_item_price_while_billing";s:1:"0";s:25:"pos_product_display_limit";s:0:"";s:15:"after_sell_page";s:3:"pos";s:19:"invoice_footer_text";s:21:"La bodega de Lima SAC";s:10:"email_from";s:19:"yheder.12@gmail.com";s:13:"email_address";s:2:"US";s:12:"email_driver";s:11:"smtp_server";s:14:"send_mail_path";s:18:"/usr/sbin/sendmail";s:9:"smtp_host";s:15:"smtp.google.com";s:13:"smtp_username";s:0:"";s:13:"smtp_password";s:0:"";s:9:"smtp_port";s:3:"465";s:7:"ssl_tls";s:3:"ssl";s:12:"ftp_hostname";s:0:"";s:12:"ftp_username";s:0:"";s:12:"ftp_password";s:0:"";}', 1, 0, 'ready', NULL, 1, NULL, 1, '2021-01-20 20:06:48'),
 	(3, 'WANKITA', 'wankita', '932568945', 'WANKITA@GMAIL.COM', 'PE', '051', 'USD', '', 2, 'AV. LAS FLORES', '1', NULL, 42, 0, NULL, NULL, 0, NULL, '3_logo.png', '3_favicon.png', 'a:32:{s:10:"gst_reg_no";s:0:"";s:8:"timezone";s:12:"America/Lima";s:21:"invoice_edit_lifespan";s:4:"1440";s:26:"invoice_edit_lifespan_unit";s:6:"minute";s:23:"invoice_delete_lifespan";s:4:"1440";s:28:"invoice_delete_lifespan_unit";s:6:"minute";s:3:"tax";s:1:"0";s:11:"sms_gateway";s:10:"Clickatell";s:9:"sms_alert";s:1:"0";s:24:"expiring_soon_alert_days";s:0:"";s:20:"datatable_item_limit";s:2:"25";s:16:"reference_format";s:13:"year_sequence";s:22:"sales_reference_prefix";s:0:"";s:16:"receipt_template";s:1:"1";s:12:"invoice_view";s:8:"standard";s:14:"business_state";s:2:"AN";s:31:"change_item_price_while_billing";s:1:"0";s:25:"pos_product_display_limit";s:0:"";s:15:"after_sell_page";s:3:"pos";s:19:"invoice_footer_text";s:0:"";s:10:"email_from";s:13:"tusolutionweb";s:13:"email_address";s:2:"US";s:12:"email_driver";s:11:"smtp_server";s:14:"send_mail_path";s:18:"/usr/sbin/sendmail";s:9:"smtp_host";s:15:"smtp.google.com";s:13:"smtp_username";s:0:"";s:13:"smtp_password";s:0:"";s:9:"smtp_port";s:3:"465";s:7:"ssl_tls";s:3:"ssl";s:12:"ftp_hostname";s:0:"";s:12:"ftp_username";s:0:"";s:12:"ftp_password";s:0:"";}', 1, 0, 'ready', NULL, 1, NULL, 1, '2021-01-24 22:36:32'),
@@ -4865,23 +4865,23 @@ INSERT INTO `stores` (`store_id`, `name`, `code_name`, `mobile`, `email`, `count
 
 -- Volcando estructura para tabla adminsoft.suppliers
 CREATE TABLE IF NOT EXISTS `suppliers` (
-  `sup_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `sup_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `code_name` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sup_mobile` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sup_email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `gtin` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sup_address` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `sup_city` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sup_state` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sup_country` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `sup_details` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `sup_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `sup_name` varchar(100) NOT NULL,
+  `code_name` varchar(55) DEFAULT NULL,
+  `sup_mobile` varchar(14) DEFAULT NULL,
+  `sup_email` varchar(100) DEFAULT NULL,
+  `gtin` varchar(100) DEFAULT NULL,
+  `sup_address` text DEFAULT NULL,
+  `sup_city` varchar(100) DEFAULT NULL,
+  `sup_state` varchar(55) DEFAULT NULL,
+  `sup_country` varchar(100) DEFAULT NULL,
+  `sup_details` longtext DEFAULT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`sup_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.suppliers: ~7 rows (aproximadamente)
-INSERT INTO `suppliers` (`sup_id`, `sup_name`, `code_name`, `sup_mobile`, `sup_email`, `gtin`, `sup_address`, `sup_city`, `sup_state`, `sup_country`, `sup_details`, `created_at`) VALUES
+REPLACE INTO `suppliers` (`sup_id`, `sup_name`, `code_name`, `sup_mobile`, `sup_email`, `gtin`, `sup_address`, `sup_city`, `sup_state`, `sup_country`, `sup_details`, `created_at`) VALUES
 	(1, 'No Supplier', 'no_supplier', '016000000', 'supplier@itsolution24.com', '', 'USA', '', '', 'AD', '', '2018-03-24 20:19:51'),
 	(2, 'BAKUS', '51', '961240141', 'bakusp@gmail.com', '', 'Av. Micaela Bastidas', 'Lima', 'peruano', 'PE', '', '2021-01-21 15:08:10'),
 	(3, 'COSTA', '51', '936240141', 'costas@gmail.com', '', 'Av. Micaela Bastidas', 'Lima', 'peruano', 'AD', '', '2021-01-21 15:09:06'),
@@ -4892,18 +4892,18 @@ INSERT INTO `suppliers` (`sup_id`, `sup_name`, `code_name`, `sup_mobile`, `sup_e
 
 -- Volcando estructura para tabla adminsoft.supplier_to_store
 CREATE TABLE IF NOT EXISTS `supplier_to_store` (
-  `s2s_id` int NOT NULL AUTO_INCREMENT,
-  `sup_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `balance` decimal(25,4) NOT NULL DEFAULT '0.0000',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `s2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sup_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `balance` decimal(25,4) NOT NULL DEFAULT 0.0000,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`s2s_id`),
   KEY `sup_id` (`sup_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.supplier_to_store: ~29 rows (aproximadamente)
-INSERT INTO `supplier_to_store` (`s2s_id`, `sup_id`, `store_id`, `balance`, `status`, `sort_order`) VALUES
+REPLACE INTO `supplier_to_store` (`s2s_id`, `sup_id`, `store_id`, `balance`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 0.0000, 1, 0),
 	(2, 1, 2, 0.0000, 1, 0),
 	(3, 2, 1, 0.0000, 1, 0),
@@ -4936,17 +4936,17 @@ INSERT INTO `supplier_to_store` (`s2s_id`, `sup_id`, `store_id`, `balance`, `sta
 
 -- Volcando estructura para tabla adminsoft.taxrates
 CREATE TABLE IF NOT EXISTS `taxrates` (
-  `taxrate_id` int NOT NULL AUTO_INCREMENT,
+  `taxrate_id` int(11) NOT NULL AUTO_INCREMENT,
   `taxrate_name` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `code_name` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `taxrate` decimal(25,4) NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`taxrate_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.taxrates: ~5 rows (aproximadamente)
-INSERT INTO `taxrates` (`taxrate_id`, `taxrate_name`, `code_name`, `taxrate`, `status`, `sort_order`) VALUES
+REPLACE INTO `taxrates` (`taxrate_id`, `taxrate_name`, `code_name`, `taxrate`, `status`, `sort_order`) VALUES
 	(1, 'GST @0%', 'GG0', 0.0000, 1, 4),
 	(2, 'GST @18%', 'GGX', 18.0000, 1, 5),
 	(3, 'No Tax', 'no_tax', 0.0000, 1, 1),
@@ -4955,17 +4955,17 @@ INSERT INTO `taxrates` (`taxrate_id`, `taxrate_name`, `code_name`, `taxrate`, `s
 
 -- Volcando estructura para tabla adminsoft.transfers
 CREATE TABLE IF NOT EXISTS `transfers` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `ref_no` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `invoice_id` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `from_store_id` int NOT NULL,
-  `to_store_id` int NOT NULL,
-  `note` varchar(1000) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ref_no` varchar(55) NOT NULL,
+  `invoice_id` varchar(100) DEFAULT NULL,
+  `from_store_id` int(11) NOT NULL,
+  `to_store_id` int(11) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
   `total_item` decimal(25,4) DEFAULT NULL,
   `total_quantity` decimal(25,4) NOT NULL,
-  `created_by` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `status` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'pending',
-  `attachment` varchar(55) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `status` varchar(55) NOT NULL DEFAULT 'pending',
+  `attachment` varchar(55) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -4974,11 +4974,11 @@ CREATE TABLE IF NOT EXISTS `transfers` (
 
 -- Volcando estructura para tabla adminsoft.transfer_items
 CREATE TABLE IF NOT EXISTS `transfer_items` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `store_id` int DEFAULT NULL,
-  `transfer_id` int NOT NULL,
-  `product_id` int NOT NULL,
-  `product_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `store_id` int(11) DEFAULT NULL,
+  `transfer_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
   `quantity` decimal(25,4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `transfer_id` (`transfer_id`),
@@ -4989,31 +4989,31 @@ CREATE TABLE IF NOT EXISTS `transfer_items` (
 
 -- Volcando estructura para tabla adminsoft.units
 CREATE TABLE IF NOT EXISTS `units` (
-  `unit_id` int NOT NULL AUTO_INCREMENT,
+  `unit_id` int(11) NOT NULL AUTO_INCREMENT,
   `unit_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `code_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `unit_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `unit_details` text CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`unit_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.units: ~2 rows (aproximadamente)
-INSERT INTO `units` (`unit_id`, `unit_name`, `code_name`, `unit_details`) VALUES
+REPLACE INTO `units` (`unit_id`, `unit_name`, `code_name`, `unit_details`) VALUES
 	(1, 'Pieces', 'pieces', ''),
 	(2, 'Unidades', 'unidades', '');
 
 -- Volcando estructura para tabla adminsoft.unit_to_store
 CREATE TABLE IF NOT EXISTS `unit_to_store` (
-  `unit2s_id` int unsigned NOT NULL AUTO_INCREMENT,
-  `uunit_id` int unsigned NOT NULL DEFAULT '0',
-  `store_id` int unsigned NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `unit2s_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uunit_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `store_id` int(10) unsigned NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`unit2s_id`),
   KEY `uunit_id` (`uunit_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.unit_to_store: ~6 rows (aproximadamente)
-INSERT INTO `unit_to_store` (`unit2s_id`, `uunit_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `unit_to_store` (`unit2s_id`, `uunit_id`, `store_id`, `status`, `sort_order`) VALUES
 	(1, 1, 1, 1, 0),
 	(2, 2, 1, 1, 0),
 	(3, 2, 2, 1, 0),
@@ -5023,23 +5023,23 @@ INSERT INTO `unit_to_store` (`unit2s_id`, `uunit_id`, `store_id`, `status`, `sor
 
 -- Volcando estructura para tabla adminsoft.users
 CREATE TABLE IF NOT EXISTS `users` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `group_id` int NOT NULL,
-  `username` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `mobile` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `mobile` varchar(20) NOT NULL,
   `dob` date DEFAULT NULL,
-  `sex` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL DEFAULT 'M',
-  `password` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `raw_password` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-  `pass_reset_code` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `sex` varchar(10) NOT NULL DEFAULT 'M',
+  `password` varchar(100) NOT NULL,
+  `raw_password` varchar(100) DEFAULT NULL,
+  `pass_reset_code` varchar(32) DEFAULT NULL,
   `reset_code_time` datetime DEFAULT NULL,
-  `login_try` tinyint unsigned NOT NULL DEFAULT '0',
+  `login_try` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `last_login` datetime DEFAULT NULL,
-  `ip` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `address` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `preference` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-  `user_image` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `ip` varchar(40) NOT NULL,
+  `address` text DEFAULT NULL,
+  `preference` longtext DEFAULT NULL,
+  `user_image` varchar(250) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -5047,7 +5047,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.users: ~5 rows (aproximadamente)
-INSERT INTO `users` (`id`, `group_id`, `username`, `email`, `mobile`, `dob`, `sex`, `password`, `raw_password`, `pass_reset_code`, `reset_code_time`, `login_try`, `last_login`, `ip`, `address`, `preference`, `user_image`, `created_at`, `updated_at`) VALUES
+REPLACE INTO `users` (`id`, `group_id`, `username`, `email`, `mobile`, `dob`, `sex`, `password`, `raw_password`, `pass_reset_code`, `reset_code_time`, `login_try`, `last_login`, `ip`, `address`, `preference`, `user_image`, `created_at`, `updated_at`) VALUES
 	(1, 1, 'Fredy Alegre', 'mitienda@gmail.com', '931240141', '1993-11-27', 'M', '6c5dc4ff5d0be4ac99337cea5576e7ff', 'tusolutionweb', '', NULL, 0, '2021-04-15 22:13:43', '::1', NULL, 'a:4:{s:10:"base_color";s:5:"black";s:14:"pos_side_panel";s:5:"right";s:11:"pos_pattern";s:13:"brickwall.jpg";s:8:"language";s:2:"es";}', '/idea.png', '2019-12-14 22:27:47', '2019-07-03 22:29:20'),
 	(2, 2, 'Cashier', 'cashier@gmail.com', '01521504597', '1990-01-01', 'M', '6c5dc4ff5d0be4ac99337cea5576e7ff', 'tusolutionweb', '', NULL, 0, '2019-12-16 00:33:07', '201.240.205.187', NULL, 'a:4:{s:10:"base_color";s:5:"green";s:14:"pos_side_panel";s:5:"right";s:11:"pos_pattern";s:31:"abstract-attractive-backdro.jpg";s:8:"language";s:2:"es";}', '', '2019-12-14 22:27:47', '2019-07-02 16:28:15'),
 	(3, 3, 'Salesman', 'salesman@gmail.com', '0113743700', '1990-01-01', 'M', '6c5dc4ff5d0be4ac99337cea5576e7ff', 'tusolutionweb', '', NULL, 0, '2019-12-16 00:32:01', '201.240.205.187', NULL, 'a:4:{s:10:"base_color";s:5:"black";s:14:"pos_side_panel";s:4:"left";s:11:"pos_pattern";s:13:"brickwall.jpg";s:8:"language";s:2:"es";}', NULL, '2019-12-14 22:27:47', '2019-07-02 21:35:07'),
@@ -5056,36 +5056,36 @@ INSERT INTO `users` (`id`, `group_id`, `username`, `email`, `mobile`, `dob`, `se
 
 -- Volcando estructura para tabla adminsoft.user_group
 CREATE TABLE IF NOT EXISTS `user_group` (
-  `group_id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `slug` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
-  `sort_order` int NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `permission` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `group_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `permission` text NOT NULL,
   PRIMARY KEY (`group_id`),
   UNIQUE KEY `slug` (`slug`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.user_group: ~3 rows (aproximadamente)
-INSERT INTO `user_group` (`group_id`, `name`, `slug`, `sort_order`, `status`, `permission`) VALUES
+REPLACE INTO `user_group` (`group_id`, `name`, `slug`, `sort_order`, `status`, `permission`) VALUES
 	(1, 'Admin', 'admin', 1, 1, 'a:1:{s:6:"access";a:122:{s:16:"read_sell_report";s:4:"true";s:20:"read_overview_report";s:4:"true";s:22:"read_collection_report";s:4:"true";s:27:"read_full_collection_report";s:4:"true";s:35:"read_customer_due_collection_report";s:4:"true";s:29:"read_supplier_due_paid_report";s:4:"true";s:14:"read_analytics";s:4:"true";s:24:"read_sell_payment_report";s:4:"true";s:20:"read_sell_tax_report";s:4:"true";s:24:"read_tax_overview_report";s:4:"true";s:17:"read_stock_report";s:4:"true";s:21:"send_report_via_email";s:4:"true";s:8:"withdraw";s:4:"true";s:7:"deposit";s:4:"true";s:8:"transfer";s:4:"true";s:17:"read_bank_account";s:4:"true";s:23:"read_bank_account_sheet";s:4:"true";s:18:"read_bank_transfer";s:4:"true";s:22:"read_bank_transactions";s:4:"true";s:19:"create_bank_account";s:4:"true";s:19:"update_bank_account";s:4:"true";s:19:"delete_bank_account";s:4:"true";s:12:"read_expense";s:4:"true";s:14:"create_expense";s:4:"true";s:14:"update_expense";s:4:"true";s:14:"delete_expense";s:4:"true";s:21:"read_sell_transaction";s:4:"true";s:23:"create_purchase_invoice";s:4:"true";s:18:"read_purchase_list";s:4:"true";s:28:"update_purchase_invoice_info";s:4:"true";s:23:"delete_purchase_invoice";s:4:"true";s:16:"purchase_payment";s:4:"true";s:13:"read_transfer";s:4:"true";s:12:"add_transfer";s:4:"true";s:15:"update_transfer";s:4:"true";s:13:"read_giftcard";s:4:"true";s:12:"add_giftcard";s:4:"true";s:15:"update_giftcard";s:4:"true";s:15:"delete_giftcard";s:4:"true";s:14:"giftcard_topup";s:4:"true";s:19:"read_giftcard_topup";s:4:"true";s:21:"delete_giftcard_topup";s:4:"true";s:12:"read_product";s:4:"true";s:14:"create_product";s:4:"true";s:14:"update_product";s:4:"true";s:14:"delete_product";s:4:"true";s:14:"import_product";s:4:"true";s:19:"product_bulk_action";s:4:"true";s:18:"delete_all_product";s:4:"true";s:13:"read_category";s:4:"true";s:15:"create_category";s:4:"true";s:15:"update_category";s:4:"true";s:15:"delete_category";s:4:"true";s:16:"read_stock_alert";s:4:"true";s:20:"read_expired_product";s:4:"true";s:19:"restore_all_product";s:4:"true";s:13:"read_supplier";s:4:"true";s:15:"create_supplier";s:4:"true";s:15:"update_supplier";s:4:"true";s:15:"delete_supplier";s:4:"true";s:21:"read_supplier_profile";s:4:"true";s:8:"read_box";s:4:"true";s:10:"create_box";s:4:"true";s:10:"update_box";s:4:"true";s:10:"delete_box";s:4:"true";s:9:"read_unit";s:4:"true";s:11:"create_unit";s:4:"true";s:11:"update_unit";s:4:"true";s:11:"delete_unit";s:4:"true";s:12:"read_taxrate";s:4:"true";s:14:"create_taxrate";s:4:"true";s:14:"update_taxrate";s:4:"true";s:14:"delete_taxrate";s:4:"true";s:9:"read_loan";s:4:"true";s:17:"read_loan_summary";s:4:"true";s:9:"take_loan";s:4:"true";s:11:"update_loan";s:4:"true";s:11:"delete_loan";s:4:"true";s:8:"loan_pay";s:4:"true";s:13:"read_customer";s:4:"true";s:21:"read_customer_profile";s:4:"true";s:15:"create_customer";s:4:"true";s:15:"update_customer";s:4:"true";s:15:"delete_customer";s:4:"true";s:9:"read_user";s:4:"true";s:11:"create_user";s:4:"true";s:11:"update_user";s:4:"true";s:11:"delete_user";s:4:"true";s:15:"change_password";s:4:"true";s:14:"read_usergroup";s:4:"true";s:16:"create_usergroup";s:4:"true";s:16:"update_usergroup";s:4:"true";s:16:"delete_usergroup";s:4:"true";s:13:"read_currency";s:4:"true";s:15:"create_currency";s:4:"true";s:15:"update_currency";s:4:"true";s:15:"change_currency";s:4:"true";s:15:"delete_currency";s:4:"true";s:16:"read_filemanager";s:4:"true";s:12:"read_pmethod";s:4:"true";s:14:"create_pmethod";s:4:"true";s:14:"update_pmethod";s:4:"true";s:14:"delete_pmethod";s:4:"true";s:10:"read_store";s:4:"true";s:12:"create_store";s:4:"true";s:12:"update_store";s:4:"true";s:12:"delete_store";s:4:"true";s:14:"activate_store";s:4:"true";s:14:"upload_favicon";s:4:"true";s:11:"upload_logo";s:4:"true";s:12:"read_printer";s:4:"true";s:14:"create_printer";s:4:"true";s:14:"update_printer";s:4:"true";s:14:"delete_printer";s:4:"true";s:20:"read_user_preference";s:4:"true";s:22:"update_user_preference";s:4:"true";s:9:"filtering";s:4:"true";s:13:"language_sync";s:4:"true";s:6:"backup";s:4:"true";s:7:"restore";s:4:"true";s:11:"show_profit";s:4:"true";s:10:"show_graph";s:4:"true";}}'),
 	(2, 'Cashier', 'cashier', 2, 1, 'a:1:{s:6:"access";a:2:{s:9:"read_user";s:4:"true";s:11:"update_user";s:4:"true";}}'),
 	(3, 'Salesman', 'salesman', 3, 1, 'a:1:{s:6:"access";a:191:{s:22:"read_recent_activities";s:4:"true";s:32:"read_dashboard_accounting_report";s:4:"true";s:16:"read_sell_report";s:4:"true";s:20:"read_overview_report";s:4:"true";s:22:"read_collection_report";s:4:"true";s:27:"read_full_collection_report";s:4:"true";s:35:"read_customer_due_collection_report";s:4:"true";s:29:"read_supplier_due_paid_report";s:4:"true";s:14:"read_analytics";s:4:"true";s:20:"read_purchase_report";s:4:"true";s:28:"read_purchase_payment_report";s:4:"true";s:24:"read_purchase_tax_report";s:4:"true";s:24:"read_sell_payment_report";s:4:"true";s:20:"read_sell_tax_report";s:4:"true";s:24:"read_tax_overview_report";s:4:"true";s:17:"read_stock_report";s:4:"true";s:21:"send_report_via_email";s:4:"true";s:8:"withdraw";s:4:"true";s:7:"deposit";s:4:"true";s:8:"transfer";s:4:"true";s:17:"read_bank_account";s:4:"true";s:23:"read_bank_account_sheet";s:4:"true";s:18:"read_bank_transfer";s:4:"true";s:22:"read_bank_transactions";s:4:"true";s:18:"read_income_source";s:4:"true";s:19:"create_bank_account";s:4:"true";s:19:"update_bank_account";s:4:"true";s:19:"delete_bank_account";s:4:"true";s:20:"create_income_source";s:4:"true";s:20:"update_income_source";s:4:"true";s:20:"delete_income_source";s:4:"true";s:21:"read_income_monthwise";s:4:"true";s:30:"read_income_and_expense_report";s:4:"true";s:27:"read_profit_and_loss_report";s:4:"true";s:20:"read_cashbook_report";s:4:"true";s:14:"read_quotation";s:4:"true";s:16:"create_quotation";s:4:"true";s:16:"update_quotation";s:4:"true";s:16:"delete_quotation";s:4:"true";s:16:"read_installment";s:4:"true";s:18:"create_installment";s:4:"true";s:18:"update_installment";s:4:"true";s:18:"delete_installment";s:4:"true";s:19:"installment_payment";s:4:"true";s:20:"installment_overview";s:4:"true";s:12:"read_expense";s:4:"true";s:14:"create_expense";s:4:"true";s:14:"update_expense";s:4:"true";s:14:"delete_expense";s:4:"true";s:21:"read_expense_category";s:4:"true";s:23:"create_expense_category";s:4:"true";s:23:"update_expense_category";s:4:"true";s:23:"delete_expense_category";s:4:"true";s:22:"read_expense_monthwise";s:4:"true";s:20:"read_expense_summary";s:4:"true";s:17:"read_sell_invoice";s:4:"true";s:14:"read_sell_list";s:4:"true";s:19:"create_sell_invoice";s:4:"true";s:24:"update_sell_invoice_info";s:4:"true";s:19:"delete_sell_invoice";s:4:"true";s:12:"sell_payment";s:4:"true";s:15:"create_sell_due";s:4:"true";s:18:"create_sell_return";s:4:"true";s:16:"read_sell_return";s:4:"true";s:18:"update_sell_return";s:4:"true";s:18:"delete_sell_return";s:4:"true";s:16:"sms_sell_invoice";s:4:"true";s:18:"email_sell_invoice";s:4:"true";s:13:"read_sell_log";s:4:"true";s:23:"create_purchase_invoice";s:4:"true";s:18:"read_purchase_list";s:4:"true";s:28:"update_purchase_invoice_info";s:4:"true";s:23:"delete_purchase_invoice";s:4:"true";s:16:"purchase_payment";s:4:"true";s:19:"create_purchase_due";s:4:"true";s:22:"create_purchase_return";s:4:"true";s:20:"read_purchase_return";s:4:"true";s:22:"update_purchase_return";s:4:"true";s:22:"delete_purchase_return";s:4:"true";s:17:"read_purchase_log";s:4:"true";s:13:"read_transfer";s:4:"true";s:12:"add_transfer";s:4:"true";s:15:"update_transfer";s:4:"true";s:15:"delete_transfer";s:4:"true";s:13:"read_giftcard";s:4:"true";s:12:"add_giftcard";s:4:"true";s:15:"update_giftcard";s:4:"true";s:15:"delete_giftcard";s:4:"true";s:14:"giftcard_topup";s:4:"true";s:19:"read_giftcard_topup";s:4:"true";s:21:"delete_giftcard_topup";s:4:"true";s:12:"read_product";s:4:"true";s:14:"create_product";s:4:"true";s:14:"update_product";s:4:"true";s:14:"delete_product";s:4:"true";s:14:"import_product";s:4:"true";s:19:"product_bulk_action";s:4:"true";s:18:"delete_all_product";s:4:"true";s:13:"read_category";s:4:"true";s:15:"create_category";s:4:"true";s:15:"update_category";s:4:"true";s:15:"delete_category";s:4:"true";s:16:"read_stock_alert";s:4:"true";s:20:"read_expired_product";s:4:"true";s:13:"barcode_print";s:4:"true";s:19:"restore_all_product";s:4:"true";s:13:"read_supplier";s:4:"true";s:15:"create_supplier";s:4:"true";s:15:"update_supplier";s:4:"true";s:15:"delete_supplier";s:4:"true";s:21:"read_supplier_profile";s:4:"true";s:10:"read_brand";s:4:"true";s:12:"create_brand";s:4:"true";s:12:"update_brand";s:4:"true";s:12:"delete_brand";s:4:"true";s:18:"read_brand_profile";s:4:"true";s:8:"read_box";s:4:"true";s:10:"create_box";s:4:"true";s:10:"update_box";s:4:"true";s:10:"delete_box";s:4:"true";s:9:"read_unit";s:4:"true";s:11:"create_unit";s:4:"true";s:11:"update_unit";s:4:"true";s:11:"delete_unit";s:4:"true";s:12:"read_taxrate";s:4:"true";s:14:"create_taxrate";s:4:"true";s:14:"update_taxrate";s:4:"true";s:14:"delete_taxrate";s:4:"true";s:9:"read_loan";s:4:"true";s:17:"read_loan_summary";s:4:"true";s:9:"take_loan";s:4:"true";s:11:"update_loan";s:4:"true";s:11:"delete_loan";s:4:"true";s:8:"loan_pay";s:4:"true";s:13:"read_customer";s:4:"true";s:21:"read_customer_profile";s:4:"true";s:15:"create_customer";s:4:"true";s:15:"update_customer";s:4:"true";s:15:"delete_customer";s:4:"true";s:20:"add_customer_balance";s:4:"true";s:26:"substract_customer_balance";s:4:"true";s:25:"read_customer_transaction";s:4:"true";s:9:"read_user";s:4:"true";s:11:"create_user";s:4:"true";s:11:"update_user";s:4:"true";s:11:"delete_user";s:4:"true";s:15:"change_password";s:4:"true";s:14:"read_usergroup";s:4:"true";s:16:"create_usergroup";s:4:"true";s:16:"update_usergroup";s:4:"true";s:16:"delete_usergroup";s:4:"true";s:13:"read_currency";s:4:"true";s:15:"create_currency";s:4:"true";s:15:"update_currency";s:4:"true";s:15:"change_currency";s:4:"true";s:15:"delete_currency";s:4:"true";s:16:"read_filemanager";s:4:"true";s:12:"read_pmethod";s:4:"true";s:14:"create_pmethod";s:4:"true";s:14:"update_pmethod";s:4:"true";s:14:"delete_pmethod";s:4:"true";s:22:"updadte_pmethod_status";s:4:"true";s:10:"read_store";s:4:"true";s:12:"create_store";s:4:"true";s:12:"update_store";s:4:"true";s:12:"delete_store";s:4:"true";s:14:"activate_store";s:4:"true";s:14:"upload_favicon";s:4:"true";s:11:"upload_logo";s:4:"true";s:12:"read_printer";s:4:"true";s:14:"create_printer";s:4:"true";s:14:"update_printer";s:4:"true";s:14:"delete_printer";s:4:"true";s:10:"send_email";s:4:"true";s:13:"read_language";s:4:"true";s:15:"create_language";s:4:"true";s:15:"update_language";s:4:"true";s:15:"delete_language";s:4:"true";s:20:"language_translation";s:4:"true";s:19:"delete_language_key";s:4:"true";s:16:"receipt_template";s:4:"true";s:20:"read_user_preference";s:4:"true";s:22:"update_user_preference";s:4:"true";s:9:"filtering";s:4:"true";s:13:"language_sync";s:4:"true";s:6:"backup";s:4:"true";s:7:"restore";s:4:"true";s:5:"reset";s:4:"true";s:19:"show_purchase_price";s:4:"true";s:11:"show_profit";s:4:"true";s:10:"show_graph";s:4:"true";}}');
 
 -- Volcando estructura para tabla adminsoft.user_to_store
 CREATE TABLE IF NOT EXISTS `user_to_store` (
-  `u2s_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `store_id` int NOT NULL DEFAULT '1',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  `sort_order` int NOT NULL DEFAULT '0',
+  `u2s_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `store_id` int(11) NOT NULL DEFAULT 1,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `sort_order` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`u2s_id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 -- Volcando datos para la tabla adminsoft.user_to_store: ~18 rows (aproximadamente)
-INSERT INTO `user_to_store` (`u2s_id`, `user_id`, `store_id`, `status`, `sort_order`) VALUES
+REPLACE INTO `user_to_store` (`u2s_id`, `user_id`, `store_id`, `status`, `sort_order`) VALUES
 	(2, 2, 1, 1, 2),
 	(3, 3, 1, 1, 3),
 	(4, 2, 2, 1, 0),
